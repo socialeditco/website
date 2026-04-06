@@ -234,49 +234,40 @@
         .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
 
         /* =========================
-           LIGHTBOX (GLASS STYLE)
+           LIGHTBOX (FIXED TIMING & CROPPING)
            ========================= */
         .lightbox {
             position: fixed;
             inset: 0;
             z-index: 99999;
-            background: rgba(20, 30, 28, 0.35);
-            backdrop-filter: blur(20px);
+            background: rgba(20, 30, 28, 0.5);
+            backdrop-filter: blur(15px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            opacity: 0;
-            animation: fadeGlass 0.4s ease forwards;
-            animation-delay: 0.3s;
-        }
-        @keyframes fadeGlass {
-            to { opacity: 1; }
+            /* Removed animation delay so it mounts seamlessly */
         }
         .lightbox-content {
             width: 100%;
-            max-width: min(1100px, 95vw);
             border-radius: 24px;
             overflow: hidden;
             background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(30px);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.35);
-            transform: scale(0.92);
-            animation: zoomIn 0.35s cubic-bezier(0.2, 1.2, 0.3, 1) forwards;
-            aspect-ratio: 16 / 9; /* Maintains shape for both video and images */
+            box-shadow: 0 40px 100px rgba(0,0,0,0.45);
+            /* Removed static aspect-ratio; handled dynamically in JS */
         }
         .lightbox-content video, .lightbox-content img {
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: contain;
+            object-fit: cover; /* Perfectly matches the clone now */
         }
         .close-lightbox {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 2;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.15);
             border: none;
             color: white;
             padding: 10px 14px;
@@ -284,9 +275,10 @@
             cursor: pointer;
             backdrop-filter: blur(10px);
             font-weight: 600;
+            transition: background 0.2s;
         }
-        @keyframes zoomIn {
-            to { transform: scale(1); }
+        .close-lightbox:hover {
+            background: rgba(255,255,255,0.3);
         }
 
         /* Global Sections */
@@ -346,13 +338,11 @@
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-        /* When one is active */
         .pricing-card.active {
             transform: scale(1.05);
             z-index: 2;
             border-color: var(--blue);
         }
-        /* Fade others */
         .pricing-grid:has(.pricing-card.active) .pricing-card:not(.active) {
             opacity: 0.5;
             transform: scale(0.98);
@@ -389,16 +379,13 @@
             width: 100%;
             aspect-ratio: 1/1;
             object-fit: cover;
-            /* Morphing organic shape */
             clip-path: polygon(12% 8%, 88% 6%, 96% 28%, 92% 78%, 80% 94%, 20% 96%, 6% 70%, 4% 22%);
             transition: clip-path 0.5s cubic-bezier(0.4, 1.4, 0.4, 1), transform 0.5s ease;
         }
-        /* Hover / Tap Morph */
         .gallery-item:hover img, .gallery-item.active img {
             clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
             transform: scale(1.08);
         }
-        /* Lift + Tilt (desktop only) */
         @media (hover: hover) {
             .gallery-item:hover .gallery-inner {
                 transform: rotateX(6deg) rotateY(-6deg) scale(1.04);
@@ -458,12 +445,10 @@
 <div id="root"></div>
 <script type="text/babel" data-presets="react">
 
-// Get Framer Motion
 const MotionLib = window.Motion || {};
 const motion = MotionLib.motion || window.motion;
 const MotionComponent = motion || { div: (props) => React.createElement('div', props) };
 
-// Three.js background
 function initThreeBackground() {
     const canvas = document.getElementById('three-canvas');
     if (!canvas) return;
@@ -567,7 +552,7 @@ const SocialEditLanding = () => {
     }, [menuOpen, lightboxOpen]);
 
     // =========================
-    // SHARED TRANSITION ENGINE (FLIP)
+    // SHARED TRANSITION ENGINE (FLIP) - FIXED
     // =========================
     const openLightboxFLIP = (el, src) => {
         if (animating) return;
@@ -576,6 +561,7 @@ const SocialEditLanding = () => {
 
         const rect = el.getBoundingClientRect();
         const clone = el.cloneNode(true);
+        const isVideo = !src;
 
         clone.style.position = 'fixed';
         clone.style.top = rect.top + 'px';
@@ -585,27 +571,35 @@ const SocialEditLanding = () => {
         clone.style.margin = 0;
         clone.style.zIndex = 999999;
         clone.style.borderRadius = '24px';
-        clone.style.transition = 'all 0.5s cubic-bezier(0.2, 1, 0.3, 1)';
+        clone.style.transition = 'all 0.45s cubic-bezier(0.2, 0.9, 0.3, 1)';
         clone.style.objectFit = 'cover';
 
         document.body.appendChild(clone);
         clone.getBoundingClientRect(); // Force repaint
 
-        const targetWidth = Math.min(window.innerWidth * 0.9, 1100);
-        const targetHeight = targetWidth * 0.5625; // Aspect Ratio 16:9
+        let targetWidth, targetHeight;
+        if (isVideo) {
+            targetWidth = Math.min(window.innerWidth * 0.95, 1100);
+            targetHeight = targetWidth * 0.5625; // perfectly scales the 16:9 box
+        } else {
+            // For 1:1 images, we constrain by the height of the screen so it NEVER crops top/bottom
+            const maxDim = Math.min(window.innerWidth * 0.9, window.innerHeight * 0.8, 800);
+            targetWidth = maxDim;
+            targetHeight = maxDim;
+        }
 
         clone.style.top = (window.innerHeight / 2 - targetHeight / 2) + 'px';
         clone.style.left = (window.innerWidth / 2 - targetWidth / 2) + 'px';
         clone.style.width = targetWidth + 'px';
         clone.style.height = targetHeight + 'px';
-        clone.style.borderRadius = '20px';
+        clone.style.borderRadius = '24px';
 
         setTimeout(() => {
             setLightboxMedia(src);
             setLightboxOpen(true);
             document.body.removeChild(clone);
             setAnimating(false);
-        }, 500);
+        }, 450); // Mapped exactly to the CSS transition time to prevent gaps
     };
 
     const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
@@ -632,6 +626,11 @@ const SocialEditLanding = () => {
         }
     };
     
+    // Calculate the perfect inline size for the real Lightbox so it mirrors the clone exactly
+    const isVideoLightbox = !lightboxMedia;
+    const lightboxMaxWidth = isVideoLightbox ? Math.min(window.innerWidth * 0.95, 1100) : Math.min(window.innerWidth * 0.9, window.innerHeight * 0.8, 800);
+    const lightboxAspect = isVideoLightbox ? '16 / 9' : '1 / 1';
+
     const galleryItems = [
         "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f53b4cde4bbc2ae60994.jpg",
         "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f53b84c045c27476f824.jpg",
@@ -701,9 +700,13 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // FLIP Lightbox 
+        // FLIP Lightbox (Properly synced)
         lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => { setLightboxOpen(false); setFocusMode(false); } },
-            React.createElement('div', { className: 'lightbox-content', onClick: (e) => e.stopPropagation() },
+            React.createElement('div', { 
+                className: 'lightbox-content', 
+                onClick: (e) => e.stopPropagation(),
+                style: { maxWidth: lightboxMaxWidth + 'px', aspectRatio: lightboxAspect }
+            },
                 React.createElement('button', { className: 'close-lightbox', onClick: () => { setLightboxOpen(false); setFocusMode(false); } }, 'CLOSE ✕'),
                 lightboxMedia 
                     ? React.createElement('img', { src: lightboxMedia, alt: 'full size' })
