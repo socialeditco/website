@@ -94,7 +94,7 @@
             background: rgba(101,196,102,0.06);
             transform: translateY(-2px);
         }
-        /* --- TOP RIGHT HAMBURGER MENU --- */
+        /* --- TOP RIGHT HAMBURGER MENU (sole navigation) --- */
         .nav-toggle {
             position: fixed;
             top: 20px;
@@ -124,7 +124,6 @@
             border-radius: 3px;
             transition: 0.3s;
         }
-        /* Mobile menu panel */
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -172,7 +171,6 @@
             align-items: center;
             padding: 60px 0;
         }
-        /* HIGH-END VIDEO PLAYER */
         .lvl-video-frame {
             width: 100%;
             max-width: 800px;
@@ -222,7 +220,6 @@
             line-height: 1.2;
             margin-bottom: 20px;
         }
-        .hero-headline span { display: inline; }
         .hero-desc {
             font-size: 1.05rem;
             color: #40655A;
@@ -230,7 +227,7 @@
             line-height: 1.5;
         }
         .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
-        /* Lightbox */
+        /* Lightbox (no controls for video) */
         .lightbox {
             position: fixed;
             inset: 0;
@@ -250,7 +247,7 @@
             overflow: hidden;
             position: relative;
         }
-        .lightbox-content video {
+        .lightbox-content video, .lightbox-content img {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -266,7 +263,7 @@
             font-weight: 600;
             cursor: pointer;
         }
-        /* Statement, Marquee, Pain Points, Pricing, Gallery, About, Contact */
+        /* Statement, Marquee, Pain Points, Pricing */
         section {
             padding: 80px 0;
             border-bottom: 1px solid #E4EAE2;
@@ -384,7 +381,7 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
-        /* RESPONSIVE CLIP-PATH GALLERY */
+        /* GALLERY - perfectly centered images, double-tap ready */
         .gallery {
             --size: 140px;
             display: grid;
@@ -397,11 +394,18 @@
             border-radius: 24px;
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
         }
         .gallery-item img {
             width: 100%;
+            max-width: 100%;
             aspect-ratio: 1/1;
             object-fit: cover;
             clip-path: path("M90,10 C100,0 100,0 110,10 190,90 190,90 190,90 200,100 200,100 190,110 190,110 110,190 110,190 100,200 100,200 90,190 90,190 10,110 10,110 0,100 0,100 10,90Z");
@@ -409,7 +413,6 @@
         }
         .gallery-item:hover img {
             clip-path: path("M0,0 C0,0 200,0 200,0 200,0 200,100 200,100 200,100 200,200 200,200 200,200 100,200 100,200 100,200 100,200 0,200 0,200 0,100 0,100 0,100 0,100 0,100Z");
-            transform: scale(1.02);
         }
         /* About Section (Mobile Optimized) */
         .about-grid {
@@ -436,9 +439,9 @@
             text-align: center;
         }
         .checklist { list-style: none; margin: 24px 0; }
-        .checklist li { margin: 14px 0; display: flex; gap: 12px; align-items: center; }
-        .checklist i { color: var(--green); width: 22px; }
-        /* Contact Form & Footer */
+        .checklist li { margin: 14px 0; display: flex; gap: 12px; align-items: flex-start; }
+        .checklist i { color: var(--green); width: 22px; margin-top: 2px; }
+        /* Contact Form & Footer Uniformity */
         .contact-form-section {
             background: #FFFFFF;
             border-radius: 48px;
@@ -466,81 +469,23 @@
             padding: 48px 40px;
             color: white;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 40px;
             margin-top: 24px;
         }
-        .contact-info p { margin: 20px 0; display: flex; align-items: center; gap: 14px; }
+        .contact-info p {
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-align: left;
+        }
         .footer-bottom { text-align: center; margin-top: 48px; padding: 24px 0 40px; font-size: 0.85rem; color: #7A9A8C; }
-        /* Floating Menu (FAB) kept as additional */
-        .fab {
-            position: fixed;
-            bottom: 28px;
-            right: 28px;
-            z-index: 9999;
-            display: block;
-        }
-        .fab-main {
-            width: 58px;
-            height: 58px;
-            border-radius: 50%;
-            background: var(--blue);
-            color: white;
-            font-size: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(0,172,210,0.4);
-            transition: transform 0.2s, background 0.2s;
-        }
-        .fab-main:hover { background: #0090b0; transform: scale(1.02); }
-        .fab-actions {
-            position: absolute;
-            bottom: 70px;
-            right: 0;
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-            background: transparent;
-            max-height: 70vh;
-            overflow-y: auto;
-            padding-bottom: 8px;
-        }
-        .fab.open .fab-actions { display: flex; }
-        .fab-action-item, .fab-phrase {
-            background: rgba(30,46,42,0.95);
-            backdrop-filter: blur(8px);
-            padding: 10px 20px;
-            border-radius: 60px;
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-            border: 1px solid rgba(101,196,102,0.5);
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-        }
-        .fab-action-item i { font-size: 1.1rem; color: var(--green); }
-        .fab-action-item:hover { background: var(--blue); border-color: white; transform: translateX(-4px); }
-        .fab-phrase {
-            background: rgba(0,0,0,0.8);
-            border-color: var(--green);
-            color: var(--green);
-            font-weight: 600;
-            white-space: nowrap;
-            pointer-events: none;
-        }
-        /* Mobile responsive overrides */
+        /* Mobile overrides */
         @media (max-width: 900px) {
             .container { padding: 0 24px; }
             .hero-grid { grid-template-columns: 1fr; gap: 40px; text-align: left; padding: 40px 0; }
             .hero-headline { font-size: 2.4rem; }
-            .hero-headline span { display: block; }
             .section-title { font-size: 2rem; }
             .support-text { max-width: 100%; text-align: left; }
             .statement-grid { grid-template-columns: 1fr; gap: 28px; }
@@ -551,13 +496,24 @@
             .contact-card .logo-horizontal { margin: 0 auto 20px; display: block; }
             .contact-info p { justify-content: center; }
             .form-grid { grid-template-columns: 1fr; }
+            .checklist li { font-size: 0.9rem; line-height: 1.3; align-items: flex-start; }
+        }
+        @media (min-width: 901px) {
+            .contact-card div:last-child {
+                border-left: 1px solid rgba(255,255,255,0.1);
+                padding-left: 40px;
+                text-align: left;
+            }
+            .contact-card .logo-horizontal {
+                margin: 0 0 15px 0 !important;
+            }
         }
         @media (max-width: 600px) {
             .gallery { --size: 110px; gap: 12px; }
             .contact-form-section, .contact-card { padding: 32px 24px; }
         }
-        /* Hide desktop navbar on mobile, but we don't have one; keep FAB */
-        .navbar { display: none; }
+        /* Remove old FAB – no longer needed */
+        .fab { display: none; }
     </style>
 </head>
 <body>
@@ -639,24 +595,13 @@ function scrollToSection(id) {
 const SocialEditLanding = () => {
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [lightboxOpen, setLightboxOpen] = React.useState(false);
+    const [lightboxMedia, setLightboxMedia] = React.useState(null); // null = video, else image src
     const videoUrl = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d3341284c045c274814fd2.mp4";
+    // Email with auto-subject line
+    const emailLink = "mailto:info@socialeditco.com?subject=Contact%20me%20to%20go%20over%20the%20best%20options%20for%20my%20business";
     
     React.useEffect(() => {
         initThreeBackground();
-        // FAB toggle
-        const fab = document.getElementById('fab');
-        if (fab) {
-            const btn = fab.querySelector('.fab-main');
-            if (btn) {
-                btn.onclick = (e) => {
-                    e.stopPropagation();
-                    fab.classList.toggle('open');
-                };
-            }
-            document.addEventListener('click', (e) => {
-                if (!fab.contains(e.target)) fab.classList.remove('open');
-            });
-        }
         // Prevent body scroll when mobile menu open
         if (menuOpen) {
             document.body.style.overflow = 'hidden';
@@ -665,9 +610,22 @@ const SocialEditLanding = () => {
         }
     }, [menuOpen]);
     
-    const fadeUp = {
-        hidden: { opacity: 0, y: 35 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    // Double-tap detection for gallery images (mobile)
+    let lastTap = 0;
+    const handleImageTap = (src, e) => {
+        const now = Date.now();
+        if (now - lastTap < 300) {
+            // double-tap detected
+            setLightboxMedia(src);
+            setLightboxOpen(true);
+        } else {
+            // single tap: could also open but we'll open on double-tap to avoid conflict with scroll
+            // but we also support click for desktop: we'll open on click for desktop, but double-tap for mobile is safer
+            // For simplicity, we open on click too (desktop friendly)
+            setLightboxMedia(src);
+            setLightboxOpen(true);
+        }
+        lastTap = now;
     };
     
     const galleryItems = [
@@ -692,21 +650,25 @@ const SocialEditLanding = () => {
         setFormData({ name: '', business: '', email: '', phone: '' });
     };
     
+    const fadeUp = {
+        hidden: { opacity: 0, y: 35 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    };
+    
     return React.createElement('div', { className: 'site-content' },
         React.createElement('canvas', { id: 'three-canvas' }),
         
-        // Hamburger Menu Toggle
+        // Hamburger Menu Toggle (sole navigation)
         React.createElement('div', { className: 'nav-toggle', onClick: () => setMenuOpen(!menuOpen) },
             React.createElement('span'), React.createElement('span'), React.createElement('span')
         ),
-        // Mobile Menu Panel
         React.createElement('div', { className: `mobile-menu ${menuOpen ? 'open' : ''}` },
             React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('services'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-tag' }), ' Services'),
             React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('work'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-images' }), ' Sample Posts'),
             React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('about'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-user' }), ' About'),
             React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('contact-form'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-paper-plane' }), ' Contact'),
             React.createElement('a', { href: 'tel:2692159207' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
-            React.createElement('a', { href: 'mailto:info@socialeditco.com' }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us')
+            React.createElement('a', { href: emailLink }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us')
         ),
         
         // Hero Section
@@ -726,7 +688,7 @@ const SocialEditLanding = () => {
                             React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
                         )
                     ),
-                    React.createElement('div', { className: 'lvl-video-frame', onClick: () => setLightboxOpen(true) },
+                    React.createElement('div', { className: 'lvl-video-frame', onClick: () => { setLightboxMedia(null); setLightboxOpen(true); } },
                         React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
                             React.createElement('source', { src: videoUrl, type: 'video/mp4' })
                         )
@@ -735,11 +697,13 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Lightbox
+        // Lightbox (no controls for video, muted autoplay)
         lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => setLightboxOpen(false) },
             React.createElement('div', { className: 'lightbox-content', onClick: (e) => e.stopPropagation() },
                 React.createElement('button', { className: 'close-lightbox', onClick: () => setLightboxOpen(false) }, 'CLOSE ✕'),
-                React.createElement('video', { src: videoUrl, controls: true, autoPlay: true, playsInline: true })
+                lightboxMedia 
+                    ? React.createElement('img', { src: lightboxMedia, alt: 'full size' })
+                    : React.createElement('video', { src: videoUrl, autoPlay: true, muted: true, loop: true, playsInline: true })
             )
         ),
         
@@ -800,7 +764,7 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Clip-Path Gallery
+        // Gallery with double-tap / click support
         React.createElement('section', { id: 'work' },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
@@ -808,7 +772,7 @@ const SocialEditLanding = () => {
                     React.createElement('div', { className: 'section-sub' }, 'Real results, real aesthetics — content that actually connects.')
                 ),
                 React.createElement('div', { className: 'gallery' }, galleryItems.map((src, i) =>
-                    React.createElement('div', { key: i, className: 'gallery-item' },
+                    React.createElement('div', { key: i, className: 'gallery-item', onClick: () => handleImageTap(src) },
                         React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
                     )
                 ))
@@ -861,40 +825,26 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Footer Contact Card
+        // Footer Contact Card (uniform)
         React.createElement('div', { className: 'container' },
             React.createElement('div', { className: 'contact-card' },
                 React.createElement('div', null,
                     React.createElement('h3', { style: { fontSize: '1.8rem', marginBottom: '20px' } }, 'Get in Touch'),
                     React.createElement('div', { className: 'contact-info' },
-                        React.createElement('p', { style: { marginBottom: '24px' } }, React.createElement('i', { className: 'fas fa-phone-alt', style: { width: '28px' } }), ' 269-215-9207'),
-                        React.createElement('p', { style: { marginBottom: '24px' } }, React.createElement('i', { className: 'fas fa-envelope', style: { width: '28px' } }), ' info@socialeditco.com'),
-                        React.createElement('p', { style: { marginBottom: '8px' } }, React.createElement('i', { className: 'fas fa-map-marker-alt', style: { width: '28px' } }), ' 8877 Dealer Dr. Richland MI 49083')
+                        React.createElement('p', null, React.createElement('i', { className: 'fas fa-phone-alt', style: { width: '28px' } }), ' 269-215-9207'),
+                        React.createElement('p', null, React.createElement('i', { className: 'fas fa-envelope', style: { width: '28px' } }), ' info@socialeditco.com'),
+                        React.createElement('p', null, React.createElement('i', { className: 'fas fa-map-marker-alt', style: { width: '28px' } }), ' 8877 Dealer Dr. Richland MI 49083')
                     )
                 ),
                 React.createElement('div', null,
-                    React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '180px', margin: '0 auto 20px', display: 'block' }, alt: 'logo' }),
-                    React.createElement('p', { style: { opacity: 0.85 } }, 'Consistency as a service — showing up every time.')
+                    React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '180px' }, alt: 'logo' }),
+                    React.createElement('p', { style: { opacity: 0.85, marginTop: '12px' } }, 'Consistency as a service — showing up every time.')
                 )
             )
         ),
         
         React.createElement('div', { className: 'footer-bottom' },
             React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
-        ),
-        
-        // Floating Action Menu (FAB)
-        React.createElement('div', { className: 'fab', id: 'fab' },
-            React.createElement('div', { className: 'fab-main' }, React.createElement('i', { className: 'fas fa-plus' })),
-            React.createElement('div', { className: 'fab-actions' },
-                React.createElement('a', { href: 'tel:2692159207', className: 'fab-action-item' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
-                React.createElement('a', { href: 'mailto:info@socialeditco.com', className: 'fab-action-item' }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us'),
-                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('services') }, React.createElement('i', { className: 'fas fa-tag' }), ' Services'),
-                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('work') }, React.createElement('i', { className: 'fas fa-images' }), ' Sample Posts'),
-                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('about') }, React.createElement('i', { className: 'fas fa-user' }), ' About'),
-                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('contact-form') }, React.createElement('i', { className: 'fas fa-paper-plane' }), ' Contact'),
-                React.createElement('div', { className: 'fab-phrase' }, '✨ Consistency beats perfection. Every time.')
-            )
         )
     );
 };
