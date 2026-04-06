@@ -18,24 +18,19 @@
     <!-- Framer Motion UMD -->
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <style>
-        /* --- EXTRA CRISPY RESET (prevents horizontal shift) --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            width: 100%;
-            overflow-x: hidden;
-            background: #FCFCF9;
-            -webkit-font-smoothing: antialiased;
+        /* --- GLOBAL RESET & EXTRA CRISPY FOUNDATION --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { 
+            width: 100%; 
+            overflow-x: hidden; 
+            background: #FCFCF9; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
         }
         body {
             font-family: 'Inter', sans-serif;
             color: #1A2F2A;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
         }
         :root {
             --green: #65C466;
@@ -99,20 +94,77 @@
             background: rgba(101,196,102,0.06);
             transform: translateY(-2px);
         }
-        /* Navbar - hidden on mobile */
-        .navbar {
+        /* --- TOP RIGHT HAMBURGER MENU --- */
+        .nav-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            background: var(--blue);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 24px 0 16px;
-            flex-wrap: wrap;
-            gap: 16px;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: background 0.2s;
         }
-        .logo-horizontal {
-            height: 52px;
-            width: auto;
+        .nav-toggle:hover {
+            background: #0090b0;
         }
-        /* Hero + Video */
+        .nav-toggle span {
+            width: 26px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+        /* Mobile menu panel */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: rgba(30,46,42,0.98);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            padding: 80px 24px 40px;
+            transition: right 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            box-shadow: -5px 0 30px rgba(0,0,0,0.2);
+        }
+        .mobile-menu.open {
+            right: 0;
+        }
+        .mobile-menu a, .mobile-menu .menu-item {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 500;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
+        .mobile-menu a:hover, .mobile-menu .menu-item:hover {
+            color: var(--green);
+            padding-left: 8px;
+        }
+        .mobile-menu i {
+            width: 24px;
+            color: var(--green);
+        }
+        /* Hero & Video */
         .hero-grid {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
@@ -120,36 +172,38 @@
             align-items: center;
             padding: 60px 0;
         }
-        .video-trigger-container {
-            position: relative;
-            border-radius: var(--radius-xl);
-            overflow: hidden;
-            cursor: pointer;
-            background: #000;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            aspect-ratio: 16 / 9;
-        }
-        .video-trigger-container:hover {
-            transform: scale(1.02);
-        }
-        .video-trigger-container video {
+        /* HIGH-END VIDEO PLAYER */
+        .lvl-video-frame {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+            max-width: 800px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--blue);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
-        .play-overlay {
+        .lvl-video-frame:hover {
+            transform: scale(1.01);
+        }
+        .lvl-video-frame::before {
+            content: '';
             position: absolute;
             inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0,0,0,0.25);
-            color: white;
-            font-size: 3rem;
-            transition: opacity 0.3s;
+            border-radius: 20px;
             pointer-events: none;
+            z-index: 2;
+            animation: lvlBorderPulse 3s infinite alternate;
+        }
+        @keyframes lvlBorderPulse {
+            0% { box-shadow: 0 0 0 0 rgba(101,196,102,0.2), inset 0 0 0 0 rgba(101,196,102,0.2); }
+            100% { box-shadow: 0 0 0 4px rgba(0,172,210,0.4), inset 0 0 0 1px rgba(0,172,210,0.3); }
+        }
+        .lvl-video-frame video {
+            width: 100%;
+            display: block;
         }
         .hero-badge {
             background: rgba(101,196,102,0.15);
@@ -176,12 +230,12 @@
             line-height: 1.5;
         }
         .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
-        /* Lightbox (landscape focus) */
+        /* Lightbox */
         .lightbox {
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.95);
-            z-index: 10000;
+            z-index: 20000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -192,7 +246,7 @@
             max-width: 1100px;
             aspect-ratio: 16 / 9;
             background: #000;
-            border-radius: 12px;
+            border-radius: 20px;
             overflow: hidden;
             position: relative;
         }
@@ -211,9 +265,8 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            font-family: 'Inter', sans-serif;
         }
-        /* Statement, Marquee, Pain Points, Pricing, Gallery, About, Contact (existing styles) */
+        /* Statement, Marquee, Pain Points, Pricing, Gallery, About, Contact */
         section {
             padding: 80px 0;
             border-bottom: 1px solid #E4EAE2;
@@ -331,40 +384,49 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
-        .gallery-grid {
+        /* RESPONSIVE CLIP-PATH GALLERY */
+        .gallery {
+            --size: 140px;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
+            gap: 20px;
             margin-top: 32px;
         }
         .gallery-item {
+            background: #FFFFFF;
             border-radius: 24px;
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            background: #F3F5F0;
             transition: all 0.3s;
+            cursor: pointer;
         }
         .gallery-item img {
             width: 100%;
-            height: 260px;
-            object-fit: contain;
-            background: #FFFFFF;
-            transition: transform 0.4s;
-            padding: 8px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            clip-path: path("M90,10 C100,0 100,0 110,10 190,90 190,90 190,90 200,100 200,100 190,110 190,110 110,190 110,190 100,200 100,200 90,190 90,190 10,110 10,110 0,100 0,100 10,90Z");
+            transition: clip-path 0.3s ease, transform 0.3s;
         }
-        .gallery-item:hover img { transform: scale(1.02); }
+        .gallery-item:hover img {
+            clip-path: path("M0,0 C0,0 200,0 200,0 200,0 200,100 200,100 200,100 200,200 200,200 200,200 100,200 100,200 100,200 100,200 0,200 0,200 0,100 0,100 0,100 0,100 0,100Z");
+            transform: scale(1.02);
+        }
+        /* About Section (Mobile Optimized) */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 48px;
-            align-items: start;
+            align-items: center;
+        }
+        .about-img {
+            text-align: center;
         }
         .about-img img {
-            width: 100%;
-            border-radius: 32px;
-            box-shadow: var(--shadow-md);
+            width: 280px;
+            border-radius: 50%;
+            border: 4px solid var(--blue);
             object-fit: cover;
-            max-height: 480px;
+            aspect-ratio: 1/1;
         }
         .founded-text {
             margin-top: 16px;
@@ -376,6 +438,7 @@
         .checklist { list-style: none; margin: 24px 0; }
         .checklist li { margin: 14px 0; display: flex; gap: 12px; align-items: center; }
         .checklist i { color: var(--green); width: 22px; }
+        /* Contact Form & Footer */
         .contact-form-section {
             background: #FFFFFF;
             border-radius: 48px;
@@ -409,7 +472,7 @@
         }
         .contact-info p { margin: 20px 0; display: flex; align-items: center; gap: 14px; }
         .footer-bottom { text-align: center; margin-top: 48px; padding: 24px 0 40px; font-size: 0.85rem; color: #7A9A8C; }
-        /* Floating Menu (FAB) */
+        /* Floating Menu (FAB) kept as additional */
         .fab {
             position: fixed;
             bottom: 28px;
@@ -472,27 +535,29 @@
             white-space: nowrap;
             pointer-events: none;
         }
-        /* Mobile specific overrides */
+        /* Mobile responsive overrides */
         @media (max-width: 900px) {
-            .navbar { display: none; }
+            .container { padding: 0 24px; }
             .hero-grid { grid-template-columns: 1fr; gap: 40px; text-align: left; padding: 40px 0; }
             .hero-headline { font-size: 2.4rem; }
             .hero-headline span { display: block; }
-            .container { padding: 0 24px; }
             .section-title { font-size: 2rem; }
             .support-text { max-width: 100%; text-align: left; }
             .statement-grid { grid-template-columns: 1fr; gap: 28px; }
-            .fab-actions { max-height: 65vh; }
-            .fab-action-item, .fab-phrase { white-space: nowrap; font-size: 0.85rem; padding: 8px 18px; }
-        }
-        @media (max-width: 600px) {
-            .container { padding: 0 16px; }
-            section { padding: 60px 0; }
-            .hero-grid { padding: 0; }
-            .video-trigger-container { border-radius: 20px; }
-            .contact-form-section, .contact-card { padding: 32px 24px; }
+            .about-grid { display: flex; flex-direction: column; align-items: center; text-align: center; }
+            .about-img { order: 1; margin-bottom: 20px; }
+            .about-content { order: 2; }
+            .contact-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; }
+            .contact-card .logo-horizontal { margin: 0 auto 20px; display: block; }
+            .contact-info p { justify-content: center; }
             .form-grid { grid-template-columns: 1fr; }
         }
+        @media (max-width: 600px) {
+            .gallery { --size: 110px; gap: 12px; }
+            .contact-form-section, .contact-card { padding: 32px 24px; }
+        }
+        /* Hide desktop navbar on mobile, but we don't have one; keep FAB */
+        .navbar { display: none; }
     </style>
 </head>
 <body>
@@ -572,11 +637,13 @@ function scrollToSection(id) {
 }
 
 const SocialEditLanding = () => {
+    const [menuOpen, setMenuOpen] = React.useState(false);
     const [lightboxOpen, setLightboxOpen] = React.useState(false);
-    const videoSrc = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4";
+    const videoUrl = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d3341284c045c274814fd2.mp4";
     
     React.useEffect(() => {
         initThreeBackground();
+        // FAB toggle
         const fab = document.getElementById('fab');
         if (fab) {
             const btn = fab.querySelector('.fab-main');
@@ -590,7 +657,13 @@ const SocialEditLanding = () => {
                 if (!fab.contains(e.target)) fab.classList.remove('open');
             });
         }
-    }, []);
+        // Prevent body scroll when mobile menu open
+        if (menuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+    }, [menuOpen]);
     
     const fadeUp = {
         hidden: { opacity: 0, y: 35 },
@@ -621,19 +694,22 @@ const SocialEditLanding = () => {
     
     return React.createElement('div', { className: 'site-content' },
         React.createElement('canvas', { id: 'three-canvas' }),
-        // Navbar (hidden on mobile)
-        React.createElement('div', { className: 'container' },
-            React.createElement('div', { className: 'navbar' },
-                React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', alt: 'Social Edit Co.' }),
-                React.createElement('div', { className: 'nav-links', style: { display: 'flex', gap: '32px', alignItems: 'center' } },
-                    React.createElement('a', { href: '#services' }, 'Services'),
-                    React.createElement('a', { href: '#work' }, 'Sample Posts'),
-                    React.createElement('a', { href: '#about' }, 'About'),
-                    React.createElement('a', { href: '#contact-form', className: 'btn btn-secondary', style: { padding: '8px 20px' } }, 'Get Started')
-                )
-            )
+        
+        // Hamburger Menu Toggle
+        React.createElement('div', { className: 'nav-toggle', onClick: () => setMenuOpen(!menuOpen) },
+            React.createElement('span'), React.createElement('span'), React.createElement('span')
         ),
-        // Hero with clean video container
+        // Mobile Menu Panel
+        React.createElement('div', { className: `mobile-menu ${menuOpen ? 'open' : ''}` },
+            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('services'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-tag' }), ' Services'),
+            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('work'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-images' }), ' Sample Posts'),
+            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('about'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-user' }), ' About'),
+            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('contact-form'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-paper-plane' }), ' Contact'),
+            React.createElement('a', { href: 'tel:2692159207' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
+            React.createElement('a', { href: 'mailto:info@socialeditco.com' }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us')
+        ),
+        
+        // Hero Section
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
@@ -650,23 +726,24 @@ const SocialEditLanding = () => {
                             React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
                         )
                     ),
-                    React.createElement('div', { className: 'video-trigger-container', onClick: () => setLightboxOpen(true) },
+                    React.createElement('div', { className: 'lvl-video-frame', onClick: () => setLightboxOpen(true) },
                         React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
-                            React.createElement('source', { src: videoSrc, type: 'video/mp4' })
-                        ),
-                        React.createElement('div', { className: 'play-overlay' }, React.createElement('i', { className: 'fas fa-play-circle' }))
+                            React.createElement('source', { src: videoUrl, type: 'video/mp4' })
+                        )
                     )
                 )
             )
         ),
+        
         // Lightbox
         lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => setLightboxOpen(false) },
             React.createElement('div', { className: 'lightbox-content', onClick: (e) => e.stopPropagation() },
                 React.createElement('button', { className: 'close-lightbox', onClick: () => setLightboxOpen(false) }, 'CLOSE ✕'),
-                React.createElement('video', { src: videoSrc, controls: true, autoPlay: true, playsInline: true })
+                React.createElement('video', { src: videoUrl, controls: true, autoPlay: true, playsInline: true })
             )
         ),
-        // Statement
+        
+        // Statement Section
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
@@ -678,6 +755,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
+        
         // Marquee
         React.createElement('div', { className: 'marquee-wrapper' },
             React.createElement('div', { className: 'marquee-track' },
@@ -685,6 +763,7 @@ const SocialEditLanding = () => {
                 React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS')
             )
         ),
+        
         // Pain Points
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
@@ -700,6 +779,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
+        
         // Pricing
         React.createElement('section', { id: 'services' },
             React.createElement('div', { className: 'container' },
@@ -719,32 +799,32 @@ const SocialEditLanding = () => {
                 React.createElement('div', { style: { textAlign: 'center', marginTop: '20px', color: '#527A6B' } }, 'No contracts. No burnout. Just consistency that compounds.')
             )
         ),
-        // Sample Posts
+        
+        // Clip-Path Gallery
         React.createElement('section', { id: 'work' },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
                     React.createElement('h2', { className: 'section-title' }, 'Sample Posts'),
                     React.createElement('div', { className: 'section-sub' }, 'Real results, real aesthetics — content that actually connects.')
                 ),
-                React.createElement('div', { className: 'gallery-grid' }, galleryItems.map((src, i) =>
-                    React.createElement(MotionComponent.div, { key: i, className: 'gallery-item', whileHover: { scale: 1.02 }, initial: { opacity: 0 }, whileInView: { opacity: 1 }, transition: { delay: i * 0.05 } },
+                React.createElement('div', { className: 'gallery' }, galleryItems.map((src, i) =>
+                    React.createElement('div', { key: i, className: 'gallery-item' },
                         React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
                     )
                 ))
             )
         ),
-        // About
+        
+        // About Amy
         React.createElement('section', { id: 'about' },
             React.createElement('div', { className: 'container' },
                 React.createElement('div', { className: 'about-grid' },
-                    React.createElement(MotionComponent.div, { initial: { opacity: 0, x: -30 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.5 } },
-                        React.createElement('div', { className: 'about-img' },
-                            React.createElement('img', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f52384c045c27476f1d1.webp', alt: 'Amy Carpenter' }),
-                            React.createElement('div', { className: 'founded-text' }, 'Founded by Amy Carpenter in 2026')
-                        )
+                    React.createElement('div', { className: 'about-img' },
+                        React.createElement('img', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f52384c045c27476f1d1.webp', alt: 'Amy Carpenter' }),
+                        React.createElement('div', { className: 'founded-text' }, 'Founded by Amy Carpenter in 2026')
                     ),
-                    React.createElement(MotionComponent.div, { initial: { opacity: 0, x: 30 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.5 } },
-                        React.createElement('h2', { className: 'section-title', style: { marginBottom: '16px' } }, 'Built for Real Businesses'),
+                    React.createElement('div', { className: 'about-content' },
+                        React.createElement('h2', { className: 'section-title' }, 'Built for Real Businesses'),
                         React.createElement('p', { style: { fontSize: '1.05rem' } }, 'Social media shouldn’t feel like a second full-time job. But for most business owners… it does. That’s why Social Edit Co. exists. The mission is simple:'),
                         React.createElement('p', { style: { fontWeight: 700, margin: '20px 0', fontSize: '1.2rem' } }, '👉 Help local businesses stay active, visible, and relevant — without the stress.'),
                         React.createElement('ul', { className: 'checklist' },
@@ -757,6 +837,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
+        
         // Contact Form
         React.createElement('div', { className: 'container', id: 'contact-form' },
             React.createElement('div', { className: 'contact-form-section' },
@@ -779,6 +860,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
+        
         // Footer Contact Card
         React.createElement('div', { className: 'container' },
             React.createElement('div', { className: 'contact-card' },
@@ -791,15 +873,17 @@ const SocialEditLanding = () => {
                     )
                 ),
                 React.createElement('div', null,
-                    React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '200px', marginBottom: '24px' }, alt: 'logo' }),
+                    React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '180px', margin: '0 auto 20px', display: 'block' }, alt: 'logo' }),
                     React.createElement('p', { style: { opacity: 0.85 } }, 'Consistency as a service — showing up every time.')
                 )
             )
         ),
+        
         React.createElement('div', { className: 'footer-bottom' },
             React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
         ),
-        // Floating Menu (FAB)
+        
+        // Floating Action Menu (FAB)
         React.createElement('div', { className: 'fab', id: 'fab' },
             React.createElement('div', { className: 'fab-main' }, React.createElement('i', { className: 'fas fa-plus' })),
             React.createElement('div', { className: 'fab-actions' },
