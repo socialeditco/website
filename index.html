@@ -52,7 +52,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            transition: transform 0.5s ease, filter 0.5s ease;
+            transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1), filter 0.45s ease;
         }
         .site-content.focus-mode {
             transform: scale(0.96);
@@ -80,25 +80,10 @@
             border: none;
             text-decoration: none;
         }
-        .btn-primary {
-            background: var(--blue);
-            color: white;
-            box-shadow: 0 8px 18px rgba(0,172,210,0.25);
-        }
-        .btn-primary:hover {
-            background: #0090b0;
-            transform: translateY(-2px);
-        }
-        .btn-secondary {
-            background: transparent;
-            border: 1.5px solid #C9D2CB;
-            color: #1E3A34;
-        }
-        .btn-secondary:hover {
-            border-color: var(--green);
-            background: rgba(101,196,102,0.06);
-            transform: translateY(-2px);
-        }
+        .btn-primary { background: var(--blue); color: white; box-shadow: 0 8px 18px rgba(0,172,210,0.25); }
+        .btn-primary:hover { background: #0090b0; transform: translateY(-2px); }
+        .btn-secondary { background: transparent; border: 1.5px solid #C9D2CB; color: #1E3A34; }
+        .btn-secondary:hover { border-color: var(--green); background: rgba(101,196,102,0.06); transform: translateY(-2px); }
 
         /* --- TOP RIGHT HAMBURGER MENU --- */
         .nav-toggle {
@@ -121,13 +106,8 @@
             transition: background 0.2s;
         }
         .nav-toggle:hover { background: #0090b0; }
-        .nav-toggle span {
-            width: 26px;
-            height: 3px;
-            background: white;
-            border-radius: 3px;
-            transition: 0.3s;
-        }
+        .nav-toggle span { width: 26px; height: 3px; background: white; border-radius: 3px; transition: 0.3s; }
+        
         .mobile-menu {
             position: fixed;
             top: 0;
@@ -146,160 +126,83 @@
         }
         .mobile-menu.open { right: 0; }
         .mobile-menu a, .mobile-menu .menu-item {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            font-weight: 500;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: 0.2s;
-            cursor: pointer;
+            color: white; text-decoration: none; font-size: 1.2rem; font-weight: 500;
+            padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.15);
+            display: flex; align-items: center; gap: 12px; transition: 0.2s; cursor: pointer;
         }
-        .mobile-menu a:hover, .mobile-menu .menu-item:hover {
-            color: var(--green);
-            padding-left: 8px;
-        }
-        .mobile-menu i {
-            width: 24px;
-            color: var(--green);
-        }
+        .mobile-menu a:hover, .mobile-menu .menu-item:hover { color: var(--green); padding-left: 8px; }
+        .mobile-menu i { width: 24px; color: var(--green); }
 
         /* Hero & Video */
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 60px;
-            align-items: center;
-            padding: 60px 0;
-        }
+        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; padding: 60px 0; }
         .lvl-video-frame {
-            width: 100%;
-            max-width: 800px;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid var(--blue);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            position: relative;
-            z-index: 1;
-            cursor: pointer;
-            transition: transform 0.2s;
+            width: 100%; max-width: 800px; border-radius: 20px; overflow: hidden;
+            border: 2px solid var(--blue); box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            position: relative; z-index: 1; cursor: pointer; transition: transform 0.2s;
         }
         .lvl-video-frame:hover { transform: scale(1.01); }
         .lvl-video-frame::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            pointer-events: none;
-            z-index: 2;
-            animation: lvlBorderPulse 3s infinite alternate;
+            content: ''; position: absolute; inset: 0; border-radius: 20px; pointer-events: none;
+            z-index: 2; animation: lvlBorderPulse 3s infinite alternate;
         }
         @keyframes lvlBorderPulse {
             0% { box-shadow: 0 0 0 0 rgba(101,196,102,0.2), inset 0 0 0 0 rgba(101,196,102,0.2); }
             100% { box-shadow: 0 0 0 4px rgba(0,172,210,0.4), inset 0 0 0 1px rgba(0,172,210,0.3); }
         }
-        .lvl-video-frame video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .hero-badge {
-            background: rgba(101,196,102,0.15);
-            color: var(--green);
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .hero-headline {
-            font-size: 3.2rem;
-            font-weight: 800;
-            font-family: 'Syne', sans-serif;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
+        .lvl-video-frame video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .hero-badge { background: rgba(101,196,102,0.15); color: var(--green); padding: 6px 14px; border-radius: 40px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-bottom: 20px; }
+        .hero-headline { font-size: 3.2rem; font-weight: 800; font-family: 'Syne', sans-serif; line-height: 1.2; margin-bottom: 20px; }
         .hero-headline span { display: inline; }
-        .hero-desc {
-            font-size: 1.05rem;
-            color: #40655A;
-            margin-bottom: 28px;
-            line-height: 1.5;
-        }
+        .hero-desc { font-size: 1.05rem; color: #40655A; margin-bottom: 28px; line-height: 1.5; }
         .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
 
         /* =========================
-           LIGHTBOX (FIXED TIMING & CROPPING)
+           LIGHTBOX (FIXED MOUNTING & SIZING)
            ========================= */
         .lightbox {
             position: fixed;
             inset: 0;
             z-index: 99999;
-            background: rgba(20, 30, 28, 0.5);
-            backdrop-filter: blur(15px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            /* Removed animation delay so it mounts seamlessly */
         }
+        /* Fade in the dark glass specifically */
+        .lightbox::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(20, 30, 28, 0.4);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeGlass 0.4s ease forwards;
+            z-index: -1;
+        }
+        @keyframes fadeGlass { to { opacity: 1; } }
+
         .lightbox-content {
-            width: 100%;
             border-radius: 24px;
             overflow: hidden;
             background: rgba(255,255,255,0.05);
             box-shadow: 0 40px 100px rgba(0,0,0,0.45);
-            /* Removed static aspect-ratio; handled dynamically in JS */
+            position: relative;
+            flex-shrink: 0; /* Prevents flexbox from squeezing it */
         }
         .lightbox-content video, .lightbox-content img {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover; /* Perfectly matches the clone now */
+            width: 100%; height: 100%; display: block; object-fit: cover; 
         }
         .close-lightbox {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 2;
-            background: rgba(255,255,255,0.15);
-            border: none;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 999px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            font-weight: 600;
-            transition: background 0.2s;
+            position: absolute; top: 20px; right: 20px; z-index: 2; background: rgba(255,255,255,0.15);
+            border: none; color: white; padding: 10px 14px; border-radius: 999px; cursor: pointer;
+            backdrop-filter: blur(10px); font-weight: 600; transition: background 0.2s;
         }
-        .close-lightbox:hover {
-            background: rgba(255,255,255,0.3);
-        }
+        .close-lightbox:hover { background: rgba(255,255,255,0.3); }
 
         /* Global Sections */
-        section {
-            padding: 80px 0;
-            border-bottom: 1px solid #E4EAE2;
-        }
-        .section-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            font-family: 'Syne', sans-serif;
-            letter-spacing: -0.02em;
-            color: #1A2F2A;
-            margin-bottom: 16px;
-        }
-        .section-sub {
-            font-size: 1.2rem;
-            color: #4A6B5E;
-            max-width: 700px;
-            margin-bottom: 40px;
-        }
+        section { padding: 80px 0; border-bottom: 1px solid #E4EAE2; }
+        .section-title { font-size: 2.8rem; font-weight: 800; font-family: 'Syne', sans-serif; letter-spacing: -0.02em; color: #1A2F2A; margin-bottom: 16px; }
+        .section-sub { font-size: 1.2rem; color: #4A6B5E; max-width: 700px; margin-bottom: 40px; }
 
         /* Statement & Pain Points */
         .statement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 32px; }
@@ -320,33 +223,13 @@
            ========================= */
         .pricing-grid { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin: 48px 0 24px; }
         .pricing-card {
-            background: white;
-            border-radius: 32px;
-            padding: 32px 28px;
-            flex: 1;
-            min-width: 260px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid #E2E9E2;
-            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            background: white; border-radius: 32px; padding: 32px 28px; flex: 1; min-width: 260px;
+            box-shadow: var(--shadow-sm); border: 1px solid #E2E9E2; transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease; cursor: pointer;
         }
-        .pricing-card.popular {
-            border-top: 4px solid var(--blue);
-            box-shadow: var(--shadow-md);
-        }
-        .pricing-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        .pricing-card.active {
-            transform: scale(1.05);
-            z-index: 2;
-            border-color: var(--blue);
-        }
-        .pricing-grid:has(.pricing-card.active) .pricing-card:not(.active) {
-            opacity: 0.5;
-            transform: scale(0.98);
-        }
+        .pricing-card.popular { border-top: 4px solid var(--blue); box-shadow: var(--shadow-md); }
+        .pricing-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .pricing-card.active { transform: scale(1.05); z-index: 2; border-color: var(--blue); }
+        .pricing-grid:has(.pricing-card.active) .pricing-card:not(.active) { opacity: 0.5; transform: scale(0.98); }
         .price { font-size: 2.6rem; font-weight: 800; margin: 16px 0 8px; }
         .pricing-features { list-style: none; margin: 24px 0; }
         .pricing-features li { margin: 12px 0; display: flex; gap: 10px; align-items: center; }
@@ -362,34 +245,20 @@
             gap: clamp(12px, 2vw, 22px);
             margin-top: 32px;
         }
-        .gallery-item {
-            position: relative;
-            border-radius: 28px;
-            overflow: visible;
-            cursor: pointer;
-            perspective: 1000px;
-        }
+        .gallery-item { position: relative; border-radius: 28px; overflow: visible; cursor: pointer; perspective: 1000px; }
         .gallery-inner {
-            border-radius: 28px;
-            overflow: hidden;
-            transform-style: preserve-3d;
-            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-radius: 28px; overflow: hidden; transform-style: preserve-3d; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .gallery-item img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
+            width: 100%; aspect-ratio: 1/1; object-fit: cover;
             clip-path: polygon(12% 8%, 88% 6%, 96% 28%, 92% 78%, 80% 94%, 20% 96%, 6% 70%, 4% 22%);
             transition: clip-path 0.5s cubic-bezier(0.4, 1.4, 0.4, 1), transform 0.5s ease;
         }
         .gallery-item:hover img, .gallery-item.active img {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-            transform: scale(1.08);
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); transform: scale(1.08);
         }
         @media (hover: hover) {
-            .gallery-item:hover .gallery-inner {
-                transform: rotateX(6deg) rotateY(-6deg) scale(1.04);
-            }
+            .gallery-item:hover .gallery-inner { transform: rotateX(6deg) rotateY(-6deg) scale(1.04); }
         }
 
         /* About & Contact */
@@ -477,7 +346,7 @@ function initThreeBackground() {
     const ring = new THREE.Mesh(ringGeo, ringMat);
     scene.add(ring);
     const ring2Geo = new THREE.TorusGeometry(8, 0.08, 64, 300);
-    const ring2Mat = new THREE.MeshStandardMaterial({ color: 0x65C466, emissive: 0x338833, transparent: true, opacity: 0.3 });
+    const ring2Mat = new MeshStandardMaterial({ color: 0x65C466, emissive: 0x338833, transparent: true, opacity: 0.3 });
     const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
     scene.add(ring2);
     
@@ -519,6 +388,7 @@ const SocialEditLanding = () => {
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [lightboxOpen, setLightboxOpen] = React.useState(false);
     const [lightboxMedia, setLightboxMedia] = React.useState(null); 
+    const [lightboxDim, setLightboxDim] = React.useState({ w: 0, h: 0 }); // Explicit tracking of dimensions
     const [focusMode, setFocusMode] = React.useState(false);
     const [animating, setAnimating] = React.useState(false);
     const [activeCard, setActiveCard] = React.useState(null);
@@ -526,7 +396,6 @@ const SocialEditLanding = () => {
     const videoUrl = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d3341284c045c274814fd2.mp4";
     const emailLink = "mailto:info@socialeditco.com?subject=Contact%20me%20to%20go%20over%20the%20best%20options%20for%20my%20business";
     
-    // Magnetic Cursor Effect
     React.useEffect(() => {
         const items = document.querySelectorAll('.gallery-item');
         items.forEach(item => {
@@ -552,7 +421,7 @@ const SocialEditLanding = () => {
     }, [menuOpen, lightboxOpen]);
 
     // =========================
-    // SHARED TRANSITION ENGINE (FLIP) - FIXED
+    // SHARED TRANSITION ENGINE (FLIP) - FIXED ASPECT RATIOS & HANGOVER
     // =========================
     const openLightboxFLIP = (el, src) => {
         if (animating) return;
@@ -562,6 +431,9 @@ const SocialEditLanding = () => {
         const rect = el.getBoundingClientRect();
         const clone = el.cloneNode(true);
         const isVideo = !src;
+        
+        // Dynamically measure the aspect ratio so it scales exactly right
+        const aspect = rect.width / rect.height;
 
         clone.style.position = 'fixed';
         clone.style.top = rect.top + 'px';
@@ -577,29 +449,39 @@ const SocialEditLanding = () => {
         document.body.appendChild(clone);
         clone.getBoundingClientRect(); // Force repaint
 
+        // Calculate Target Box based purely on available screen space and natural aspect ratio
         let targetWidth, targetHeight;
+        
         if (isVideo) {
             targetWidth = Math.min(window.innerWidth * 0.95, 1100);
-            targetHeight = targetWidth * 0.5625; // perfectly scales the 16:9 box
         } else {
-            // For 1:1 images, we constrain by the height of the screen so it NEVER crops top/bottom
-            const maxDim = Math.min(window.innerWidth * 0.9, window.innerHeight * 0.8, 800);
-            targetWidth = maxDim;
-            targetHeight = maxDim;
+            targetWidth = Math.min(window.innerWidth * 0.9, 800);
+        }
+        
+        targetHeight = targetWidth / aspect;
+
+        // Prevent it from pushing off the top/bottom of screen
+        const maxHeight = window.innerHeight * 0.85;
+        if (targetHeight > maxHeight) {
+            targetHeight = maxHeight;
+            targetWidth = targetHeight * aspect;
         }
 
+        // Apply final target dimensions to clone
         clone.style.top = (window.innerHeight / 2 - targetHeight / 2) + 'px';
         clone.style.left = (window.innerWidth / 2 - targetWidth / 2) + 'px';
         clone.style.width = targetWidth + 'px';
         clone.style.height = targetHeight + 'px';
         clone.style.borderRadius = '24px';
 
+        // Wait EXACTLY 450ms for transition to finish, then seamless handoff
         setTimeout(() => {
             setLightboxMedia(src);
+            setLightboxDim({ w: targetWidth, h: targetHeight }); // Give real lightbox the exact same specs
             setLightboxOpen(true);
             document.body.removeChild(clone);
             setAnimating(false);
-        }, 450); // Mapped exactly to the CSS transition time to prevent gaps
+        }, 450); 
     };
 
     const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
@@ -626,11 +508,6 @@ const SocialEditLanding = () => {
         }
     };
     
-    // Calculate the perfect inline size for the real Lightbox so it mirrors the clone exactly
-    const isVideoLightbox = !lightboxMedia;
-    const lightboxMaxWidth = isVideoLightbox ? Math.min(window.innerWidth * 0.95, 1100) : Math.min(window.innerWidth * 0.9, window.innerHeight * 0.8, 800);
-    const lightboxAspect = isVideoLightbox ? '16 / 9' : '1 / 1';
-
     const galleryItems = [
         "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f53b4cde4bbc2ae60994.jpg",
         "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f53b84c045c27476f824.jpg",
@@ -658,210 +535,214 @@ const SocialEditLanding = () => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
     };
     
-    return React.createElement('div', { className: `site-content ${focusMode ? 'focus-mode' : ''}` },
-        React.createElement('canvas', { id: 'three-canvas' }),
-        
-        // Hamburger Menu Toggle
-        React.createElement('div', { className: 'nav-toggle', onClick: () => setMenuOpen(!menuOpen) },
-            React.createElement('span'), React.createElement('span'), React.createElement('span')
-        ),
-        React.createElement('div', { className: `mobile-menu ${menuOpen ? 'open' : ''}` },
-            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('services'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-tag' }), ' Services'),
-            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('work'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-images' }), ' Sample Posts'),
-            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('about'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-user' }), ' About'),
-            React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('contact-form'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-paper-plane' }), ' Contact'),
-            React.createElement('a', { href: 'tel:2692159207' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
-            React.createElement('a', { href: emailLink }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us')
-        ),
-        
-        // Hero Section
-        React.createElement('section', null,
-            React.createElement('div', { className: 'container' },
-                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
-                    React.createElement('div', null,
-                        React.createElement('div', { className: 'hero-badge' }, 'Consistency as a service'),
-                        React.createElement('h1', { className: 'hero-headline' },
-                            React.createElement('span', null, 'Stay Active'), ' ',
-                            React.createElement('span', null, 'Stay Relevant'), ' ',
-                            React.createElement('span', null, 'Stay Growing')
+    return React.createElement(React.Fragment, null,
+    
+        // WRAPPER 1: The Site Content (This is what blurs/shrinks)
+        React.createElement('div', { className: `site-content ${focusMode ? 'focus-mode' : ''}` },
+            React.createElement('canvas', { id: 'three-canvas' }),
+            
+            // Hamburger Menu
+            React.createElement('div', { className: 'nav-toggle', onClick: () => setMenuOpen(!menuOpen) },
+                React.createElement('span'), React.createElement('span'), React.createElement('span')
+            ),
+            React.createElement('div', { className: `mobile-menu ${menuOpen ? 'open' : ''}` },
+                React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('services'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-tag' }), ' Services'),
+                React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('work'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-images' }), ' Sample Posts'),
+                React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('about'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-user' }), ' About'),
+                React.createElement('div', { className: 'menu-item', onClick: () => { scrollToSection('contact-form'); setMenuOpen(false); } }, React.createElement('i', { className: 'fas fa-paper-plane' }), ' Contact'),
+                React.createElement('a', { href: 'tel:2692159207' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
+                React.createElement('a', { href: emailLink }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us')
+            ),
+            
+            // Hero
+            React.createElement('section', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
+                        React.createElement('div', null,
+                            React.createElement('div', { className: 'hero-badge' }, 'Consistency as a service'),
+                            React.createElement('h1', { className: 'hero-headline' },
+                                React.createElement('span', null, 'Stay Active'), ' ',
+                                React.createElement('span', null, 'Stay Relevant'), ' ',
+                                React.createElement('span', null, 'Stay Growing')
+                            ),
+                            React.createElement('p', { className: 'hero-desc' }, 'Most businesses don’t fail on social media… they just disappear. We make sure you don’t. Consistent, branded content that keeps you visible — without you lifting a finger.'),
+                            React.createElement('div', { className: 'btn-group' },
+                                React.createElement('a', { href: '#contact-form', className: 'btn btn-primary' }, 'Get Started'),
+                                React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
+                            )
                         ),
-                        React.createElement('p', { className: 'hero-desc' }, 'Most businesses don’t fail on social media… they just disappear. We make sure you don’t. Consistent, branded content that keeps you visible — without you lifting a finger.'),
-                        React.createElement('div', { className: 'btn-group' },
-                            React.createElement('a', { href: '#contact-form', className: 'btn btn-primary' }, 'Get Started'),
-                            React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
-                        )
-                    ),
-                    React.createElement('div', { className: 'lvl-video-frame', onClick: handleHeroVideoClick },
-                        React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
-                            React.createElement('source', { src: videoUrl, type: 'video/mp4' })
+                        React.createElement('div', { className: 'lvl-video-frame', onClick: handleHeroVideoClick },
+                            React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
+                                React.createElement('source', { src: videoUrl, type: 'video/mp4' })
+                            )
                         )
                     )
                 )
+            ),
+            
+            // Statement
+            React.createElement('section', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
+                        React.createElement('div', { className: 'statement-grid' },
+                            React.createElement('div', { className: 'statement-big' }, 'You don’t need more ideas. You need consistency.'),
+                            React.createElement('div', { className: 'quote-block' }, '“Most businesses don’t lose on social media because they’re bad… they lose because they stop.”')
+                        ),
+                        React.createElement('div', { className: 'support-text' }, 'You’re busy running a business. Posting becomes inconsistent. Engagement drops. Visibility fades. AI tools? They help… until they don’t. They miss your voice. Your brand. Your identity. That’s where we come in.')
+                    )
+                )
+            ),
+            
+            // Marquee
+            React.createElement('div', { className: 'marquee-wrapper' },
+                React.createElement('div', { className: 'marquee-track' },
+                    React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS'), ' • ',
+                    React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS')
+                )
+            ),
+            
+            // Pain Points
+            React.createElement('section', null,
+                React.createElement('div', { className: 'container' },
+                    React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
+                        React.createElement('h2', { className: 'section-title' }, 'Why Most Businesses Struggle with Social Media'),
+                        React.createElement('div', { className: 'pain-grid' },
+                            React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-clock pain-icon' }), React.createElement('h3', null, 'No time to create content'), React.createElement('p', null, 'Running your business already fills your day.')),
+                            React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-chart-line pain-icon' }), React.createElement('h3', null, 'Inconsistent posting'), React.createElement('p', null, 'Gaps kill momentum and algorithm love.')),
+                            React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-user-slash pain-icon' }), React.createElement('h3', null, 'Hiring someone unreliable'), React.createElement('p', null, 'Freelancers vanish, quality suffers.')),
+                            React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-microchip pain-icon' }), React.createElement('h3', null, 'AI content that feels… off'), React.createElement('p', null, 'Missing your unique voice and soul.'))
+                        ),
+                        React.createElement('div', { className: 'close-bold' }, '👉 You don’t need more tools. You need someone who shows up — every time.')
+                    )
+                )
+            ),
+            
+            // Pricing
+            React.createElement('section', { id: 'services' },
+                React.createElement('div', { className: 'container' },
+                    React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
+                        React.createElement('h2', { className: 'section-title' }, 'Simple. Consistent. Effective.'),
+                        React.createElement('div', { className: 'section-sub' }, 'No fluff. No overcomplication. Just showing up — the right way — every time.')
+                    ),
+                    React.createElement('div', { className: 'pricing-grid' }, pricingPlans.map((plan, idx) =>
+                        React.createElement(MotionComponent.div, { 
+                            key: idx, 
+                            className: `pricing-card ${plan.popular ? 'popular' : ''} ${activeCard === idx ? 'active' : ''}`, 
+                            onClick: () => setActiveCard(idx),
+                            onMouseLeave: () => setActiveCard(null),
+                            initial: { opacity: 0, y: 30 }, 
+                            whileInView: { opacity: 1, y: 0 }, 
+                            transition: { delay: idx * 0.08 } 
+                        },
+                            React.createElement('h3', { style: { fontSize: '1.6rem' } }, plan.name),
+                            React.createElement('div', { className: 'price' }, plan.price, React.createElement('span', { style: { fontSize: '1rem' } }, ' / month')),
+                            React.createElement('p', { style: { fontWeight: 500 } }, plan.posts),
+                            React.createElement('ul', { className: 'pricing-features' }, plan.features.map((f, i) => React.createElement('li', { key: i }, React.createElement('i', { className: 'fas fa-check', style: { color: '#65C466' } }), ' ', f))),
+                            React.createElement('div', { className: 'callout' }, plan.callout)
+                        )
+                    )),
+                    React.createElement('div', { style: { textAlign: 'center', marginTop: '20px', color: '#527A6B' } }, 'No contracts. No burnout. Just consistency that compounds.')
+                )
+            ),
+            
+            // Gallery
+            React.createElement('section', { id: 'work' },
+                React.createElement('div', { className: 'container' },
+                    React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
+                        React.createElement('h2', { className: 'section-title' }, 'Sample Posts'),
+                        React.createElement('div', { className: 'section-sub' }, 'Real results, real aesthetics — content that actually connects.')
+                    ),
+                    React.createElement('div', { className: 'gallery' }, galleryItems.map((src, i) =>
+                        React.createElement('div', { key: i, className: 'gallery-item', onClick: (e) => handleImageInteraction(e, src) },
+                            React.createElement('div', { className: 'gallery-inner' },
+                                React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
+                            )
+                        )
+                    ))
+                )
+            ),
+            
+            // About
+            React.createElement('section', { id: 'about' },
+                React.createElement('div', { className: 'container' },
+                    React.createElement('div', { className: 'about-grid' },
+                        React.createElement('div', { className: 'about-img' },
+                            React.createElement('img', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f52384c045c27476f1d1.webp', alt: 'Amy Carpenter' }),
+                            React.createElement('div', { className: 'founded-text' }, 'Founded by Amy Carpenter in 2026')
+                        ),
+                        React.createElement('div', { className: 'about-content' },
+                            React.createElement('h2', { className: 'section-title' }, 'Built for Real Businesses'),
+                            React.createElement('p', { style: { fontSize: '1.05rem' } }, 'Social media shouldn’t feel like a second full-time job. But for most business owners… it does. That’s why Social Edit Co. exists. The mission is simple:'),
+                            React.createElement('p', { style: { fontWeight: 700, margin: '20px 0', fontSize: '1.2rem' } }, '👉 Help local businesses stay active, visible, and relevant — without the stress.'),
+                            React.createElement('ul', { className: 'checklist' },
+                                React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more “I forgot to post this week”'),
+                                React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more inconsistent branding'),
+                                React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more unreliable freelancers')
+                            ),
+                            React.createElement('p', null, 'We don’t overcomplicate it. We just make sure it gets done — consistently.')
+                        )
+                    )
+                )
+            ),
+            
+            // Contact
+            React.createElement('div', { className: 'container', id: 'contact-form' },
+                React.createElement('div', { className: 'contact-form-section' },
+                    React.createElement('h2', { className: 'section-title', style: { marginBottom: '8px' } }, 'Let’s Get You Consistent'),
+                    React.createElement('p', { style: { marginBottom: '32px', color: '#4A6B5E' } }, 'Tell us about your business and we’ll get you set up with the right plan.'),
+                    React.createElement('form', { onSubmit: handleSubmit },
+                        React.createElement('div', { className: 'form-grid' },
+                            React.createElement('div', null,
+                                React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Full Name ', React.createElement('span', { className: 'optional' }, '*')), React.createElement('input', { type: 'text', name: 'name', value: formData.name, onChange: handleChange, required: true })),
+                                React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Business Name ', React.createElement('span', { className: 'optional' }, '(optional)')), React.createElement('input', { type: 'text', name: 'business', value: formData.business, onChange: handleChange }))
+                            ),
+                            React.createElement('div', null,
+                                React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Email ', React.createElement('span', { className: 'optional' }, '*')), React.createElement('input', { type: 'email', name: 'email', value: formData.email, onChange: handleChange, required: true })),
+                                React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Phone Number ', React.createElement('span', { className: 'optional' }, '(optional)')), React.createElement('input', { type: 'tel', name: 'phone', value: formData.phone, onChange: handleChange }))
+                            )
+                        ),
+                        React.createElement('div', { style: { marginTop: '24px', textAlign: 'center' } },
+                            React.createElement('button', { type: 'submit', className: 'btn btn-primary' }, 'Let\'s discuss options')
+                        )
+                    )
+                )
+            ),
+            
+            // Footer
+            React.createElement('div', { className: 'container' },
+                React.createElement('div', { className: 'contact-card' },
+                    React.createElement('div', null,
+                        React.createElement('h3', { style: { fontSize: '1.8rem', marginBottom: '20px' } }, 'Get in Touch'),
+                        React.createElement('div', { className: 'contact-info' },
+                            React.createElement('p', null, React.createElement('i', { className: 'fas fa-phone-alt', style: { width: '28px' } }), ' 269-215-9207'),
+                            React.createElement('p', null, React.createElement('i', { className: 'fas fa-envelope', style: { width: '28px' } }), ' info@socialeditco.com'),
+                            React.createElement('p', null, React.createElement('i', { className: 'fas fa-map-marker-alt', style: { width: '28px' } }), ' 8877 Dealer Dr. Richland MI 49083')
+                        )
+                    ),
+                    React.createElement('div', null,
+                        React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '180px' }, alt: 'logo' }),
+                        React.createElement('p', { style: { opacity: 0.85, marginTop: '12px' } }, 'Consistency as a service — showing up every time.')
+                    )
+                )
+            ),
+            
+            React.createElement('div', { className: 'footer-bottom' },
+                React.createElement('p', null, '© 2026 Social Edit Co. — Consistency as a Service. All rights reserved.')
             )
-        ),
-        
-        // FLIP Lightbox (Properly synced)
+        ), 
+
+        // WRAPPER 2: The Sibling Lightbox (Immune to the Blur effect)
         lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => { setLightboxOpen(false); setFocusMode(false); } },
             React.createElement('div', { 
                 className: 'lightbox-content', 
                 onClick: (e) => e.stopPropagation(),
-                style: { maxWidth: lightboxMaxWidth + 'px', aspectRatio: lightboxAspect }
+                style: { width: lightboxDim.w + 'px', height: lightboxDim.h + 'px' }
             },
                 React.createElement('button', { className: 'close-lightbox', onClick: () => { setLightboxOpen(false); setFocusMode(false); } }, 'CLOSE ✕'),
                 lightboxMedia 
                     ? React.createElement('img', { src: lightboxMedia, alt: 'full size' })
                     : React.createElement('video', { src: videoUrl, autoPlay: true, muted: true, loop: true, playsInline: true })
             )
-        ),
-        
-        // Statement Section
-        React.createElement('section', null,
-            React.createElement('div', { className: 'container' },
-                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
-                    React.createElement('div', { className: 'statement-grid' },
-                        React.createElement('div', { className: 'statement-big' }, 'You don’t need more ideas. You need consistency.'),
-                        React.createElement('div', { className: 'quote-block' }, '“Most businesses don’t lose on social media because they’re bad… they lose because they stop.”')
-                    ),
-                    React.createElement('div', { className: 'support-text' }, 'You’re busy running a business. Posting becomes inconsistent. Engagement drops. Visibility fades. AI tools? They help… until they don’t. They miss your voice. Your brand. Your identity. That’s where we come in.')
-                )
-            )
-        ),
-        
-        // Marquee
-        React.createElement('div', { className: 'marquee-wrapper' },
-            React.createElement('div', { className: 'marquee-track' },
-                React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS'), ' • ',
-                React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS')
-            )
-        ),
-        
-        // Pain Points
-        React.createElement('section', null,
-            React.createElement('div', { className: 'container' },
-                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
-                    React.createElement('h2', { className: 'section-title' }, 'Why Most Businesses Struggle with Social Media'),
-                    React.createElement('div', { className: 'pain-grid' },
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-clock pain-icon' }), React.createElement('h3', null, 'No time to create content'), React.createElement('p', null, 'Running your business already fills your day.')),
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-chart-line pain-icon' }), React.createElement('h3', null, 'Inconsistent posting'), React.createElement('p', null, 'Gaps kill momentum and algorithm love.')),
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-user-slash pain-icon' }), React.createElement('h3', null, 'Hiring someone unreliable'), React.createElement('p', null, 'Freelancers vanish, quality suffers.')),
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-microchip pain-icon' }), React.createElement('h3', null, 'AI content that feels… off'), React.createElement('p', null, 'Missing your unique voice and soul.'))
-                    ),
-                    React.createElement('div', { className: 'close-bold' }, '👉 You don’t need more tools. You need someone who shows up — every time.')
-                )
-            )
-        ),
-        
-        // Pricing
-        React.createElement('section', { id: 'services' },
-            React.createElement('div', { className: 'container' },
-                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
-                    React.createElement('h2', { className: 'section-title' }, 'Simple. Consistent. Effective.'),
-                    React.createElement('div', { className: 'section-sub' }, 'No fluff. No overcomplication. Just showing up — the right way — every time.')
-                ),
-                React.createElement('div', { className: 'pricing-grid' }, pricingPlans.map((plan, idx) =>
-                    React.createElement(MotionComponent.div, { 
-                        key: idx, 
-                        className: `pricing-card ${plan.popular ? 'popular' : ''} ${activeCard === idx ? 'active' : ''}`, 
-                        onClick: () => setActiveCard(idx),
-                        onMouseLeave: () => setActiveCard(null),
-                        initial: { opacity: 0, y: 30 }, 
-                        whileInView: { opacity: 1, y: 0 }, 
-                        transition: { delay: idx * 0.08 } 
-                    },
-                        React.createElement('h3', { style: { fontSize: '1.6rem' } }, plan.name),
-                        React.createElement('div', { className: 'price' }, plan.price, React.createElement('span', { style: { fontSize: '1rem' } }, ' / month')),
-                        React.createElement('p', { style: { fontWeight: 500 } }, plan.posts),
-                        React.createElement('ul', { className: 'pricing-features' }, plan.features.map((f, i) => React.createElement('li', { key: i }, React.createElement('i', { className: 'fas fa-check', style: { color: '#65C466' } }), ' ', f))),
-                        React.createElement('div', { className: 'callout' }, plan.callout)
-                    )
-                )),
-                React.createElement('div', { style: { textAlign: 'center', marginTop: '20px', color: '#527A6B' } }, 'No contracts. No burnout. Just consistency that compounds.')
-            )
-        ),
-        
-        // Gallery with FLIP
-        React.createElement('section', { id: 'work' },
-            React.createElement('div', { className: 'container' },
-                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
-                    React.createElement('h2', { className: 'section-title' }, 'Sample Posts'),
-                    React.createElement('div', { className: 'section-sub' }, 'Real results, real aesthetics — content that actually connects.')
-                ),
-                React.createElement('div', { className: 'gallery' }, galleryItems.map((src, i) =>
-                    React.createElement('div', { key: i, className: 'gallery-item', onClick: (e) => handleImageInteraction(e, src) },
-                        React.createElement('div', { className: 'gallery-inner' },
-                            React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
-                        )
-                    )
-                ))
-            )
-        ),
-        
-        // About
-        React.createElement('section', { id: 'about' },
-            React.createElement('div', { className: 'container' },
-                React.createElement('div', { className: 'about-grid' },
-                    React.createElement('div', { className: 'about-img' },
-                        React.createElement('img', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f52384c045c27476f1d1.webp', alt: 'Amy Carpenter' }),
-                        React.createElement('div', { className: 'founded-text' }, 'Founded by Amy Carpenter in 2026')
-                    ),
-                    React.createElement('div', { className: 'about-content' },
-                        React.createElement('h2', { className: 'section-title' }, 'Built for Real Businesses'),
-                        React.createElement('p', { style: { fontSize: '1.05rem' } }, 'Social media shouldn’t feel like a second full-time job. But for most business owners… it does. That’s why Social Edit Co. exists. The mission is simple:'),
-                        React.createElement('p', { style: { fontWeight: 700, margin: '20px 0', fontSize: '1.2rem' } }, '👉 Help local businesses stay active, visible, and relevant — without the stress.'),
-                        React.createElement('ul', { className: 'checklist' },
-                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more “I forgot to post this week”'),
-                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more inconsistent branding'),
-                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more unreliable freelancers')
-                        ),
-                        React.createElement('p', null, 'We don’t overcomplicate it. We just make sure it gets done — consistently.')
-                    )
-                )
-            )
-        ),
-        
-        // Contact Form
-        React.createElement('div', { className: 'container', id: 'contact-form' },
-            React.createElement('div', { className: 'contact-form-section' },
-                React.createElement('h2', { className: 'section-title', style: { marginBottom: '8px' } }, 'Let’s Get You Consistent'),
-                React.createElement('p', { style: { marginBottom: '32px', color: '#4A6B5E' } }, 'Tell us about your business and we’ll get you set up with the right plan.'),
-                React.createElement('form', { onSubmit: handleSubmit },
-                    React.createElement('div', { className: 'form-grid' },
-                        React.createElement('div', null,
-                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Full Name ', React.createElement('span', { className: 'optional' }, '*')), React.createElement('input', { type: 'text', name: 'name', value: formData.name, onChange: handleChange, required: true })),
-                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Business Name ', React.createElement('span', { className: 'optional' }, '(optional)')), React.createElement('input', { type: 'text', name: 'business', value: formData.business, onChange: handleChange }))
-                        ),
-                        React.createElement('div', null,
-                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Email ', React.createElement('span', { className: 'optional' }, '*')), React.createElement('input', { type: 'email', name: 'email', value: formData.email, onChange: handleChange, required: true })),
-                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Phone Number ', React.createElement('span', { className: 'optional' }, '(optional)')), React.createElement('input', { type: 'tel', name: 'phone', value: formData.phone, onChange: handleChange }))
-                        )
-                    ),
-                    React.createElement('div', { style: { marginTop: '24px', textAlign: 'center' } },
-                        React.createElement('button', { type: 'submit', className: 'btn btn-primary' }, 'Let\'s discuss options')
-                    )
-                )
-            )
-        ),
-        
-        // Footer Contact Card
-        React.createElement('div', { className: 'container' },
-            React.createElement('div', { className: 'contact-card' },
-                React.createElement('div', null,
-                    React.createElement('h3', { style: { fontSize: '1.8rem', marginBottom: '20px' } }, 'Get in Touch'),
-                    React.createElement('div', { className: 'contact-info' },
-                        React.createElement('p', null, React.createElement('i', { className: 'fas fa-phone-alt', style: { width: '28px' } }), ' 269-215-9207'),
-                        React.createElement('p', null, React.createElement('i', { className: 'fas fa-envelope', style: { width: '28px' } }), ' info@socialeditco.com'),
-                        React.createElement('p', null, React.createElement('i', { className: 'fas fa-map-marker-alt', style: { width: '28px' } }), ' 8877 Dealer Dr. Richland MI 49083')
-                    )
-                ),
-                React.createElement('div', null,
-                    React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '180px' }, alt: 'logo' }),
-                    React.createElement('p', { style: { opacity: 0.85, marginTop: '12px' } }, 'Consistency as a service — showing up every time.')
-                )
-            )
-        ),
-        
-        React.createElement('div', { className: 'footer-bottom' },
-            React.createElement('p', null, '© 2026 Social Edit Co. — Consistency as a Service. All rights reserved.')
         )
     );
 };
