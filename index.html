@@ -6,15 +6,19 @@
     <title>Social Edit Co. | Consistency as a Service</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- React + ReactDOM UMD (development for safety, but stable) -->
+    <!-- Font Awesome 6 (icons only, no emojis) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- React + ReactDOM UMD -->
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-    <!-- Babel Standalone for JSX in browser -->
+    <!-- Babel Standalone for JSX -->
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
     <!-- Three.js Core - isolated module -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Framer Motion UMD (exposes window.Motion with .motion) -->
+    <!-- Framer Motion UMD -->
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
+    <!-- GSAP for floating menu smoothness (optional but adds polish) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -44,12 +48,12 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.35;
         }
         .site-content {
             position: relative;
             z-index: 2;
-            background: rgba(252,252,249,0.92);
+            background: rgba(252,252,249,0.94);
             backdrop-filter: blur(1px);
         }
         .container {
@@ -61,7 +65,7 @@
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             padding: 12px 28px;
             border-radius: 60px;
             font-weight: 600;
@@ -134,34 +138,40 @@
             max-width: 700px;
             margin-bottom: 40px;
         }
-        /* Hero grid */
+        /* Hero grid - laptop frame */
         .hero-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 48px;
             align-items: center;
         }
-        .device-frame {
-            background: #FFFFFF;
-            border-radius: 48px;
-            padding: 12px 8px;
+        .laptop-frame {
+            background: #E2E8E2;
+            border-radius: 28px 28px 20px 20px;
+            padding: 16px 16px 40px 16px;
             box-shadow: var(--shadow-md);
-            border: 1px solid rgba(0,0,0,0.04);
+            position: relative;
         }
-        .device-inner {
+        .laptop-screen {
             background: #000;
-            border-radius: 36px;
+            border-radius: 16px;
             overflow: hidden;
-            aspect-ratio: 9 / 19.5;
-            max-width: 300px;
-            margin: 0 auto;
-            box-shadow: inset 0 0 0 2px rgba(255,255,255,0.2);
+            aspect-ratio: 16 / 9;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
         }
-        .device-inner video {
+        .laptop-screen video {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+        .laptop-base {
+            height: 8px;
+            background: #B0B7B0;
+            width: 60%;
+            margin: 0 auto;
+            border-radius: 0 0 8px 8px;
+            margin-top: -4px;
         }
         .hero-badge {
             background: rgba(101,196,102,0.15);
@@ -179,6 +189,9 @@
             font-family: 'Syne', sans-serif;
             line-height: 1.2;
             margin-bottom: 20px;
+        }
+        .hero-headline span {
+            display: inline;
         }
         .hero-desc {
             font-size: 1.05rem;
@@ -233,7 +246,7 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        /* Pain Points */
+        /* Pain Points - icon only */
         .pain-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -242,12 +255,17 @@
         }
         .pain-card {
             background: white;
-            padding: 24px 20px;
+            padding: 28px 20px;
             border-radius: 24px;
             box-shadow: var(--shadow-sm);
             border: 1px solid #E2E8E0;
+            text-align: center;
         }
-        .pain-icon { font-size: 2rem; margin-bottom: 12px; }
+        .pain-icon {
+            font-size: 2.2rem;
+            margin-bottom: 16px;
+            color: var(--blue);
+        }
         .close-bold {
             font-size: 1.3rem;
             font-weight: 700;
@@ -300,34 +318,41 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
-        /* Gallery */
+        /* Sample Posts Gallery - fixed cropping */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 24px;
+            gap: 28px;
             margin-top: 32px;
         }
         .gallery-item {
-            border-radius: 28px;
+            border-radius: 24px;
             overflow: hidden;
             box-shadow: var(--shadow-sm);
+            background: #F3F5F0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s;
-            background: #fff;
         }
         .gallery-item img {
             width: 100%;
-            height: 280px;
-            object-fit: cover;
-            display: block;
+            height: 260px;
+            object-fit: contain;
+            background: #FFFFFF;
             transition: transform 0.4s;
+            padding: 8px;
         }
-        .gallery-item:hover img { transform: scale(1.03); }
+        .gallery-item:hover img { transform: scale(1.02); }
         /* About */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 48px;
-            align-items: center;
+            align-items: start;
+        }
+        .about-img {
+            position: relative;
         }
         .about-img img {
             width: 100%;
@@ -335,6 +360,14 @@
             box-shadow: var(--shadow-md);
             object-fit: cover;
             max-height: 480px;
+        }
+        .founded-text {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: var(--blue);
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.5px;
         }
         .checklist {
             list-style: none;
@@ -346,7 +379,52 @@
             gap: 12px;
             align-items: center;
         }
-        /* Contact */
+        .checklist i {
+            color: var(--green);
+            width: 22px;
+        }
+        /* Contact & Form Section */
+        .contact-form-section {
+            background: #FFFFFF;
+            border-radius: 48px;
+            padding: 48px 40px;
+            margin: 0 0 48px 0;
+            box-shadow: var(--shadow-md);
+            border: 1px solid #E4EAE2;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2F4D45;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid #D4DDD4;
+            background: #FEFEF9;
+            font-family: 'Inter', sans-serif;
+            transition: 0.2s;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(0,172,210,0.2);
+        }
+        .optional {
+            font-size: 0.75rem;
+            color: #7A9A8C;
+            margin-left: 6px;
+        }
         .contact-card {
             background: #1E2E2A;
             border-radius: 48px;
@@ -355,12 +433,13 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
+            margin-top: 24px;
         }
         .contact-info p {
-            margin: 12px 0;
+            margin: 20px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
         .footer-bottom {
             text-align: center;
@@ -369,36 +448,102 @@
             font-size: 0.85rem;
             color: #7A9A8C;
         }
-        .sticky-quote {
-            position: sticky;
-            bottom: 24px;
-            z-index: 99;
-            display: flex;
-            justify-content: center;
-            pointer-events: none;
+        /* Floating Action Menu (inspired by attached) */
+        .fab {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 1000;
         }
-        .quote-bubble {
+        .fab-main {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
             background: var(--blue);
             color: white;
-            padding: 12px 32px;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0,172,210,0.4);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .fab-main:hover {
+            background: #0090b0;
+            transform: scale(1.02);
+        }
+        .fab-actions {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            background: transparent;
+        }
+        .fab.open .fab-actions {
+            display: flex;
+        }
+        .fab-action-item {
+            background: rgba(30,46,42,0.95);
+            backdrop-filter: blur(8px);
+            padding: 10px 20px;
             border-radius: 60px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            box-shadow: 0 12px 24px rgba(0,0,0,0.2);
-            pointer-events: auto;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            border: 1px solid rgba(101,196,102,0.5);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+        .fab-action-item i {
+            font-size: 1.1rem;
+            color: var(--green);
+        }
+        .fab-action-item:hover {
+            background: var(--blue);
+            border-color: white;
+            transform: translateX(-4px);
+        }
+        .fab-phrase {
+            background: rgba(0,0,0,0.75);
+            backdrop-filter: blur(8px);
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--green);
+            border: 1px solid var(--green);
+            white-space: nowrap;
         }
         @media (max-width: 900px) {
-            .hero-grid, .statement-grid, .about-grid, .contact-card {
+            .hero-grid, .statement-grid, .about-grid, .contact-card, .form-grid {
                 grid-template-columns: 1fr;
             }
             .hero-headline { font-size: 2.4rem; }
+            .hero-headline span { display: block; }
             .container { padding: 0 24px; }
             .section-title { font-size: 2rem; }
+            .support-text { max-width: 100%; text-align: center; }
+            .statement-grid .statement-big { text-align: center; }
+            .quote-block { text-align: center; }
         }
         @media (max-width: 640px) {
             .navbar { flex-direction: column; }
             .nav-links { gap: 20px; }
             .pricing-card { min-width: 100%; }
+            .fab-action-item { padding: 8px 16px; font-size: 0.8rem; }
+        }
+        .no-emoji i {
+            font-style: normal;
+        }
+        .icon-text {
+            margin-right: 6px;
         }
     </style>
 </head>
@@ -406,14 +551,12 @@
 <div id="root"></div>
 <script type="text/babel" data-presets="react">
 
-// Get Framer Motion from UMD (window.Motion)
+// Get Framer Motion from UMD
 const MotionLib = window.Motion || {};
-const motion = MotionLib.motion || window.motion; // fallback
-
-// Helper: if motion is still undefined, provide a dummy that renders divs (but should exist)
+const motion = MotionLib.motion || window.motion;
 const MotionComponent = motion || { div: (props) => React.createElement('div', props) };
 
-// Three.js isolated background setup
+// Three.js isolated background
 function initThreeBackground() {
     const canvas = document.getElementById('three-canvas');
     if (!canvas) return;
@@ -424,9 +567,8 @@ function initThreeBackground() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     
-    // Particle field
     const particlesGeo = new THREE.BufferGeometry();
-    const count = 900;
+    const count = 800;
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
         positions[i*3] = (Math.random() - 0.5) * 90;
@@ -434,16 +576,15 @@ function initThreeBackground() {
         positions[i*3+2] = (Math.random() - 0.5) * 50 - 20;
     }
     particlesGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    const particleMat = new THREE.PointsMaterial({ color: 0x65C466, size: 0.18, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending });
+    const particleMat = new THREE.PointsMaterial({ color: 0x65C466, size: 0.16, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
     const particles = new THREE.Points(particlesGeo, particleMat);
     scene.add(particles);
     
-    // accent rings
-    const ringGeo = new THREE.TorusGeometry(5.2, 0.1, 64, 300);
-    const ringMat = new THREE.MeshStandardMaterial({ color: 0x00ACD2, emissive: 0x0077A0, transparent: true, opacity: 0.4 });
+    const ringGeo = new THREE.TorusGeometry(5.5, 0.1, 64, 300);
+    const ringMat = new THREE.MeshStandardMaterial({ color: 0x00ACD2, emissive: 0x0077A0, transparent: true, opacity: 0.35 });
     const ring = new THREE.Mesh(ringGeo, ringMat);
     scene.add(ring);
-    const ring2Geo = new THREE.TorusGeometry(7.8, 0.08, 64, 300);
+    const ring2Geo = new THREE.TorusGeometry(8, 0.08, 64, 300);
     const ring2Mat = new THREE.MeshStandardMaterial({ color: 0x65C466, emissive: 0x338833, transparent: true, opacity: 0.3 });
     const ring2 = new THREE.Mesh(ring2Geo, ring2Mat);
     scene.add(ring2);
@@ -477,10 +618,16 @@ function initThreeBackground() {
     });
 }
 
-// Main React Component
+// Main Component
 const SocialEditLanding = () => {
     React.useEffect(() => {
         initThreeBackground();
+        // Floating menu toggle
+        const fab = document.getElementById('fab');
+        if (fab) {
+            const btn = fab.querySelector('.fab-main');
+            btn.onclick = () => fab.classList.toggle('open');
+        }
     }, []);
     
     const fadeUp = {
@@ -502,6 +649,15 @@ const SocialEditLanding = () => {
         { name: "Full Momentum", price: "$950", posts: "15 Posts / Month", features: ["Maximum consistency", "Strong brand identity", "Ongoing engagement + growth"], callout: "👉 This is where momentum builds.", popular: false }
     ];
     
+    // Form state
+    const [formData, setFormData] = React.useState({ name: '', business: '', email: '', phone: '' });
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        alert(`Thanks ${formData.name}! We'll be in touch shortly.`);
+        setFormData({ name: '', business: '', email: '', phone: '' });
+    };
+    
     return React.createElement('div', { className: 'site-content' },
         React.createElement('canvas', { id: 'three-canvas' }),
         // Navbar
@@ -510,31 +666,36 @@ const SocialEditLanding = () => {
                 React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', alt: 'Social Edit Co.', style: { height: '52px' } }),
                 React.createElement('div', { className: 'nav-links' },
                     React.createElement('a', { href: '#services' }, 'Services'),
-                    React.createElement('a', { href: '#work' }, 'Work'),
+                    React.createElement('a', { href: '#work' }, 'Sample Posts'),
                     React.createElement('a', { href: '#about' }, 'About'),
-                    React.createElement('a', { href: '#contact', className: 'btn btn-secondary', style: { padding: '8px 20px' } }, 'Get Started')
+                    React.createElement('a', { href: '#contact-form', className: 'btn btn-secondary', style: { padding: '8px 20px' } }, 'Get Started')
                 )
             )
         ),
-        // Hero
+        // Hero with laptop video
         React.createElement('section', { style: { paddingTop: '20px' } },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
                     React.createElement('div', null,
-                        React.createElement('div', { className: 'hero-badge' }, '✨ Consistency as a service'),
-                        React.createElement('h1', { className: 'hero-headline' }, 'Stay Active. Stay Relevant. Stay Growing.'),
+                        React.createElement('div', { className: 'hero-badge' }, 'Consistency as a service'),
+                        React.createElement('h1', { className: 'hero-headline' },
+                            React.createElement('span', null, 'Stay Active'),
+                            React.createElement('span', null, 'Stay Relevant'),
+                            React.createElement('span', null, 'Stay Growing')
+                        ),
                         React.createElement('p', { className: 'hero-desc' }, 'Most businesses don’t fail on social media… they just disappear. We make sure you don’t. Consistent, branded content that keeps you visible — without you lifting a finger.'),
                         React.createElement('div', { className: 'btn-group' },
-                            React.createElement('a', { href: '#contact', className: 'btn btn-primary' }, 'Get Started'),
+                            React.createElement('a', { href: '#contact-form', className: 'btn btn-primary' }, 'Get Started'),
                             React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
                         )
                     ),
-                    React.createElement('div', { className: 'device-frame' },
-                        React.createElement('div', { className: 'device-inner' },
+                    React.createElement('div', { className: 'laptop-frame' },
+                        React.createElement('div', { className: 'laptop-screen' },
                             React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
                                 React.createElement('source', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4', type: 'video/mp4' })
                             )
-                        )
+                        ),
+                        React.createElement('div', { className: 'laptop-base' })
                     )
                 )
             )
@@ -558,16 +719,16 @@ const SocialEditLanding = () => {
                 React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS')
             )
         ),
-        // Pain Points
+        // Pain Points with icons
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
                     React.createElement('h2', { className: 'section-title' }, 'Why Most Businesses Struggle with Social Media'),
                     React.createElement('div', { className: 'pain-grid' },
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('div', { className: 'pain-icon' }, '⏰'), React.createElement('h3', null, 'No time to create content'), React.createElement('p', null, 'Running your business already fills your day.')),
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('div', { className: 'pain-icon' }, '📉'), React.createElement('h3', null, 'Inconsistent posting'), React.createElement('p', null, 'Gaps kill momentum and algorithm love.')),
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('div', { className: 'pain-icon' }, '🔄'), React.createElement('h3', null, 'Hiring someone unreliable'), React.createElement('p', null, 'Freelancers vanish, quality suffers.')),
-                        React.createElement('div', { className: 'pain-card' }, React.createElement('div', { className: 'pain-icon' }, '🤖'), React.createElement('h3', null, 'AI content that feels… off'), React.createElement('p', null, 'Missing your unique voice and soul.'))
+                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-clock pain-icon' }), React.createElement('h3', null, 'No time to create content'), React.createElement('p', null, 'Running your business already fills your day.')),
+                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-chart-line pain-icon' }), React.createElement('h3', null, 'Inconsistent posting'), React.createElement('p', null, 'Gaps kill momentum and algorithm love.')),
+                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-user-slash pain-icon' }), React.createElement('h3', null, 'Hiring someone unreliable'), React.createElement('p', null, 'Freelancers vanish, quality suffers.')),
+                        React.createElement('div', { className: 'pain-card' }, React.createElement('i', { className: 'fas fa-microchip pain-icon' }), React.createElement('h3', null, 'AI content that feels… off'), React.createElement('p', null, 'Missing your unique voice and soul.'))
                     ),
                     React.createElement('div', { className: 'close-bold' }, '👉 You don’t need more tools. You need someone who shows up — every time.')
                 )
@@ -585,86 +746,106 @@ const SocialEditLanding = () => {
                         React.createElement('h3', { style: { fontSize: '1.6rem' } }, plan.name),
                         React.createElement('div', { className: 'price' }, plan.price, React.createElement('span', { style: { fontSize: '1rem' } }, ' / month')),
                         React.createElement('p', { style: { fontWeight: 500 } }, plan.posts),
-                        React.createElement('ul', { className: 'pricing-features' }, plan.features.map((f, i) => React.createElement('li', { key: i }, '✓ ', f))),
+                        React.createElement('ul', { className: 'pricing-features' }, plan.features.map((f, i) => React.createElement('li', { key: i }, React.createElement('i', { className: 'fas fa-check', style: { color: '#65C466' } }), ' ', f))),
                         React.createElement('div', { className: 'callout' }, plan.callout)
                     )
                 )),
                 React.createElement('div', { style: { textAlign: 'center', marginTop: '20px', color: '#527A6B' } }, 'No contracts. No burnout. Just consistency that compounds.')
             )
         ),
-        // Gallery
+        // Sample Posts Gallery
         React.createElement('section', { id: 'work' },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
-                    React.createElement('h2', { className: 'section-title' }, 'Recent Edits'),
+                    React.createElement('h2', { className: 'section-title' }, 'Sample Posts'),
                     React.createElement('div', { className: 'section-sub' }, 'Real results, real aesthetics — content that actually connects.')
                 ),
                 React.createElement('div', { className: 'gallery-grid' }, galleryItems.map((src, i) =>
                     React.createElement(MotionComponent.div, { key: i, className: 'gallery-item', whileHover: { scale: 1.02 }, initial: { opacity: 0 }, whileInView: { opacity: 1 }, transition: { delay: i * 0.05 } },
-                        React.createElement('img', { src: src, alt: 'portfolio', loading: 'lazy' })
+                        React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
                     )
                 ))
             )
         ),
-        // About
+        // About Amy
         React.createElement('section', { id: 'about' },
             React.createElement('div', { className: 'container' },
                 React.createElement('div', { className: 'about-grid' },
                     React.createElement(MotionComponent.div, { initial: { opacity: 0, x: -30 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.5 } },
                         React.createElement('div', { className: 'about-img' },
-                            React.createElement('img', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f52384c045c27476f1d1.webp', alt: 'Amy Carpenter' })
+                            React.createElement('img', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2f52384c045c27476f1d1.webp', alt: 'Amy Carpenter' }),
+                            React.createElement('div', { className: 'founded-text' }, 'Founded by Amy Carpenter in 2026')
                         )
                     ),
                     React.createElement(MotionComponent.div, { initial: { opacity: 0, x: 30 }, whileInView: { opacity: 1, x: 0 }, transition: { duration: 0.5 } },
                         React.createElement('h2', { className: 'section-title', style: { marginBottom: '16px' } }, 'Built for Real Businesses'),
-                        React.createElement('p', { style: { fontSize: '1.05rem' } }, 'Social media shouldn’t feel like a second full-time job. But for most business owners… it does. That’s why Social Edit Co. exists. Founded by Amy Carpenter, the mission is simple:'),
+                        React.createElement('p', { style: { fontSize: '1.05rem' } }, 'Social media shouldn’t feel like a second full-time job. But for most business owners… it does. That’s why Social Edit Co. exists. The mission is simple:'),
                         React.createElement('p', { style: { fontWeight: 700, margin: '20px 0', fontSize: '1.2rem' } }, '👉 Help local businesses stay active, visible, and relevant — without the stress.'),
                         React.createElement('ul', { className: 'checklist' },
-                            React.createElement('li', null, '✔ No more “I forgot to post this week”'),
-                            React.createElement('li', null, '✔ No more inconsistent branding'),
-                            React.createElement('li', null, '✔ No more unreliable freelancers disappearing')
+                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more “I forgot to post this week”'),
+                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more inconsistent branding'),
+                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more unreliable freelancers disappearing')
                         ),
                         React.createElement('p', null, 'We don’t overcomplicate it. We just make sure it gets done — consistently.')
                     )
                 )
             )
         ),
-        // Contact
-        React.createElement('section', { id: 'contact', style: { borderBottom: 'none' } },
-            React.createElement('div', { className: 'container' },
-                React.createElement('div', { className: 'contact-card' },
-                    React.createElement('div', null,
-                        React.createElement('h3', { style: { fontSize: '2rem', marginBottom: '16px' } }, 'Let’s Get You Consistent'),
-                        React.createElement('p', null, 'Tell us about your business and we’ll get you set up with the right plan.'),
-                        React.createElement('p', { style: { marginTop: '16px', fontWeight: 500 } }, 'The sooner you start… the sooner you stop falling behind.'),
-                        React.createElement('div', { className: 'btn-group', style: { marginTop: '28px' } },
-                            React.createElement('a', { href: '#', className: 'btn btn-primary', style: { background: 'white', color: '#1A2F2A' } }, 'Start My Content Plan →')
+        // Contact Form Section
+        React.createElement('div', { className: 'container', id: 'contact-form' },
+            React.createElement('div', { className: 'contact-form-section' },
+                React.createElement('h2', { className: 'section-title', style: { marginBottom: '8px' } }, 'Let’s Get You Consistent'),
+                React.createElement('p', { style: { marginBottom: '32px', color: '#4A6B5E' } }, 'Tell us about your business and we’ll get you set up with the right plan.'),
+                React.createElement('form', { onSubmit: handleSubmit },
+                    React.createElement('div', { className: 'form-grid' },
+                        React.createElement('div', null,
+                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Full Name ', React.createElement('span', { className: 'optional' }, '*')), React.createElement('input', { type: 'text', name: 'name', value: formData.name, onChange: handleChange, required: true })),
+                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Business Name ', React.createElement('span', { className: 'optional' }, '(optional)')), React.createElement('input', { type: 'text', name: 'business', value: formData.business, onChange: handleChange }))
                         ),
-                        React.createElement('div', { style: { marginTop: '32px' } },
-                            React.createElement('p', null, '📞 269-215-9207'),
-                            React.createElement('p', null, '✉️ info@socialeditco.com'),
-                            React.createElement('p', null, '📍 8877 Dealer Dr. Richland MI 49083')
+                        React.createElement('div', null,
+                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Email ', React.createElement('span', { className: 'optional' }, '*')), React.createElement('input', { type: 'email', name: 'email', value: formData.email, onChange: handleChange, required: true })),
+                            React.createElement('div', { className: 'input-group' }, React.createElement('label', null, 'Phone Number ', React.createElement('span', { className: 'optional' }, '(optional)')), React.createElement('input', { type: 'tel', name: 'phone', value: formData.phone, onChange: handleChange }))
                         )
                     ),
-                    React.createElement('div', null,
-                        React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '200px', marginBottom: '24px' }, alt: 'logo' }),
-                        React.createElement('p', { style: { opacity: 0.85 } }, 'Consistency beats perfection. Every time.')
+                    React.createElement('div', { style: { marginTop: '24px', textAlign: 'center' } },
+                        React.createElement('button', { type: 'submit', className: 'btn btn-primary' }, 'Start My Content Plan →')
                     )
                 )
-            ),
-            React.createElement('div', { className: 'footer-bottom' },
-                React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
             )
         ),
-        React.createElement('div', { className: 'sticky-quote' },
-            React.createElement('div', { className: 'quote-bubble' }, '✨ Consistency beats perfection. Every time. ✨')
+        // Contact Card (footer info)
+        React.createElement('div', { className: 'container' },
+            React.createElement('div', { className: 'contact-card' },
+                React.createElement('div', null,
+                    React.createElement('h3', { style: { fontSize: '1.8rem', marginBottom: '20px' } }, 'Get in Touch'),
+                    React.createElement('div', { className: 'contact-info' },
+                        React.createElement('p', { style: { marginBottom: '24px' } }, React.createElement('i', { className: 'fas fa-phone-alt', style: { width: '28px' } }), ' 269-215-9207'),
+                        React.createElement('p', { style: { marginBottom: '24px' } }, React.createElement('i', { className: 'fas fa-envelope', style: { width: '28px' } }), ' info@socialeditco.com'),
+                        React.createElement('p', { style: { marginBottom: '8px' } }, React.createElement('i', { className: 'fas fa-map-marker-alt', style: { width: '28px' } }), ' 8877 Dealer Dr. Richland MI 49083')
+                    )
+                ),
+                React.createElement('div', null,
+                    React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', style: { filter: 'brightness(0) invert(1)', maxWidth: '200px', marginBottom: '24px' }, alt: 'logo' }),
+                    React.createElement('p', { style: { opacity: 0.85 } }, 'Consistency as a service — showing up every time.')
+                )
+            )
+        ),
+        React.createElement('div', { className: 'footer-bottom' },
+            React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
+        ),
+        // Floating Menu (FAB)
+        React.createElement('div', { className: 'fab', id: 'fab' },
+            React.createElement('div', { className: 'fab-main' }, React.createElement('i', { className: 'fas fa-plus' })),
+            React.createElement('div', { className: 'fab-actions' },
+                React.createElement('a', { href: 'tel:2692159207', className: 'fab-action-item' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
+                React.createElement('a', { href: 'mailto:info@socialeditco.com', className: 'fab-action-item' }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us'),
+                React.createElement('div', { className: 'fab-phrase' }, '✨ Consistency beats perfection. Every time.')
+            )
         )
     );
 };
 
-// Render
-const rootElement = document.getElementById('root');
-const root = ReactDOM.createRoot(rootElement);
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(React.createElement(SocialEditLanding));
 </script>
 </body>
