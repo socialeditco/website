@@ -18,16 +18,24 @@
     <!-- Framer Motion UMD -->
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <style>
+        /* --- EXTRA CRISPY RESET (prevents horizontal shift) --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            background: #FCFCF9;
+            -webkit-font-smoothing: antialiased;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background: #FCFCF9;
             color: #1A2F2A;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         :root {
             --green: #65C466;
@@ -40,10 +48,7 @@
         }
         #three-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             z-index: 0;
             pointer-events: none;
             opacity: 0.35;
@@ -51,10 +56,12 @@
         .site-content {
             position: relative;
             z-index: 2;
-            background: rgba(252,252,249,0.94);
-            backdrop-filter: blur(1px);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         .container {
+            width: 100%;
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 32px;
@@ -105,62 +112,44 @@
             height: 52px;
             width: auto;
         }
-        .nav-links {
-            display: flex;
-            gap: 32px;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 500;
-            color: #2F4D45;
-            transition: color 0.2s;
-        }
-        .nav-links a:hover { color: var(--blue); }
-        /* Sections */
-        section {
-            padding: 80px 0;
-            border-bottom: 1px solid #E4EAE2;
-        }
-        .section-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            font-family: 'Syne', sans-serif;
-            letter-spacing: -0.02em;
-            color: #1A2F2A;
-            margin-bottom: 16px;
-        }
-        .section-sub {
-            font-size: 1.2rem;
-            color: #4A6B5E;
-            max-width: 700px;
-            margin-bottom: 40px;
-        }
-        /* Hero grid - video with clickable lightbox */
+        /* Hero + Video */
         .hero-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
             align-items: center;
+            padding: 60px 0;
         }
-        .hero-video-wrapper {
-            border-radius: 28px;
+        .video-trigger-container {
+            position: relative;
+            border-radius: var(--radius-xl);
             overflow: hidden;
-            box-shadow: var(--shadow-md);
-            background: #E2E8E2;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .hero-video-wrapper:hover {
-            transform: scale(1.01);
-        }
-        .hero-video-wrapper video {
-            width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
+            background: #000;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             aspect-ratio: 16 / 9;
-            pointer-events: none; /* click goes to wrapper for lightbox */
+        }
+        .video-trigger-container:hover {
+            transform: scale(1.02);
+        }
+        .video-trigger-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.25);
+            color: white;
+            font-size: 3rem;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
         .hero-badge {
             background: rgba(101,196,102,0.15);
@@ -179,9 +168,7 @@
             line-height: 1.2;
             margin-bottom: 20px;
         }
-        .hero-headline span {
-            display: inline;
-        }
+        .hero-headline span { display: inline; }
         .hero-desc {
             font-size: 1.05rem;
             color: #40655A;
@@ -189,7 +176,62 @@
             line-height: 1.5;
         }
         .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
-        /* Statement */
+        /* Lightbox (landscape focus) */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .lightbox-content {
+            width: 100%;
+            max-width: 1100px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .lightbox-content video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .close-lightbox {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+        /* Statement, Marquee, Pain Points, Pricing, Gallery, About, Contact (existing styles) */
+        section {
+            padding: 80px 0;
+            border-bottom: 1px solid #E4EAE2;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.02em;
+            color: #1A2F2A;
+            margin-bottom: 16px;
+        }
+        .section-sub {
+            font-size: 1.2rem;
+            color: #4A6B5E;
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
         .statement-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -215,10 +257,7 @@
             color: #557268;
             max-width: 85%;
             text-align: left;
-            margin-left: 0;
-            margin-right: auto;
         }
-        /* Marquee */
         .marquee-wrapper {
             background: #1A2F2A;
             color: white;
@@ -238,7 +277,6 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        /* Pain Points */
         .pain-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -253,11 +291,7 @@
             border: 1px solid #E2E8E0;
             text-align: center;
         }
-        .pain-icon {
-            font-size: 2.2rem;
-            margin-bottom: 16px;
-            color: var(--blue);
-        }
+        .pain-icon { font-size: 2.2rem; margin-bottom: 16px; color: var(--blue); }
         .close-bold {
             font-size: 1.3rem;
             font-weight: 700;
@@ -265,7 +299,6 @@
             padding-top: 20px;
             border-top: 2px solid #DDE5DC;
         }
-        /* Pricing Cards */
         .pricing-grid {
             display: flex;
             flex-wrap: wrap;
@@ -288,21 +321,9 @@
             transform: scale(1.02);
             box-shadow: var(--shadow-md);
         }
-        .price {
-            font-size: 2.6rem;
-            font-weight: 800;
-            margin: 16px 0 8px;
-        }
-        .pricing-features {
-            list-style: none;
-            margin: 24px 0;
-        }
-        .pricing-features li {
-            margin: 12px 0;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
+        .price { font-size: 2.6rem; font-weight: 800; margin: 16px 0 8px; }
+        .pricing-features { list-style: none; margin: 24px 0; }
+        .pricing-features li { margin: 12px 0; display: flex; gap: 10px; align-items: center; }
         .callout {
             background: #F3F8F1;
             padding: 12px;
@@ -310,7 +331,6 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
-        /* Sample Posts Gallery */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -333,7 +353,6 @@
             padding: 8px;
         }
         .gallery-item:hover img { transform: scale(1.02); }
-        /* About */
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -353,23 +372,10 @@
             color: var(--blue);
             font-weight: 600;
             text-align: center;
-            letter-spacing: 0.5px;
         }
-        .checklist {
-            list-style: none;
-            margin: 24px 0;
-        }
-        .checklist li {
-            margin: 14px 0;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-        .checklist i {
-            color: var(--green);
-            width: 22px;
-        }
-        /* Contact & Form */
+        .checklist { list-style: none; margin: 24px 0; }
+        .checklist li { margin: 14px 0; display: flex; gap: 12px; align-items: center; }
+        .checklist i { color: var(--green); width: 22px; }
         .contact-form-section {
             background: #FFFFFF;
             border-radius: 48px;
@@ -378,20 +384,9 @@
             box-shadow: var(--shadow-md);
             border: 1px solid #E4EAE2;
         }
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-        .input-group {
-            margin-bottom: 20px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #2F4D45;
-        }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #2F4D45; }
         .input-group input {
             width: 100%;
             padding: 14px 18px;
@@ -399,18 +394,9 @@
             border: 1px solid #D4DDD4;
             background: #FEFEF9;
             font-family: 'Inter', sans-serif;
-            transition: 0.2s;
         }
-        .input-group input:focus {
-            outline: none;
-            border-color: var(--blue);
-            box-shadow: 0 0 0 2px rgba(0,172,210,0.2);
-        }
-        .optional {
-            font-size: 0.75rem;
-            color: #7A9A8C;
-            margin-left: 6px;
-        }
+        .input-group input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(0,172,210,0.2); }
+        .optional { font-size: 0.75rem; color: #7A9A8C; margin-left: 6px; }
         .contact-card {
             background: #1E2E2A;
             border-radius: 48px;
@@ -421,20 +407,9 @@
             gap: 40px;
             margin-top: 24px;
         }
-        .contact-info p {
-            margin: 20px 0;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .footer-bottom {
-            text-align: center;
-            margin-top: 48px;
-            padding: 24px 0 40px;
-            font-size: 0.85rem;
-            color: #7A9A8C;
-        }
-        /* ========== FLOATING MENU (FAB) ========== */
+        .contact-info p { margin: 20px 0; display: flex; align-items: center; gap: 14px; }
+        .footer-bottom { text-align: center; margin-top: 48px; padding: 24px 0 40px; font-size: 0.85rem; color: #7A9A8C; }
+        /* Floating Menu (FAB) */
         .fab {
             position: fixed;
             bottom: 28px;
@@ -456,10 +431,7 @@
             box-shadow: 0 6px 20px rgba(0,172,210,0.4);
             transition: transform 0.2s, background 0.2s;
         }
-        .fab-main:hover {
-            background: #0090b0;
-            transform: scale(1.02);
-        }
+        .fab-main:hover { background: #0090b0; transform: scale(1.02); }
         .fab-actions {
             position: absolute;
             bottom: 70px;
@@ -472,9 +444,7 @@
             overflow-y: auto;
             padding-bottom: 8px;
         }
-        .fab.open .fab-actions {
-            display: flex;
-        }
+        .fab.open .fab-actions { display: flex; }
         .fab-action-item, .fab-phrase {
             background: rgba(30,46,42,0.95);
             backdrop-filter: blur(8px);
@@ -489,19 +459,11 @@
             align-items: center;
             gap: 10px;
             font-size: 0.9rem;
-            letter-spacing: 0.3px;
             font-family: 'Inter', sans-serif;
             cursor: pointer;
         }
-        .fab-action-item i {
-            font-size: 1.1rem;
-            color: var(--green);
-        }
-        .fab-action-item:hover {
-            background: var(--blue);
-            border-color: white;
-            transform: translateX(-4px);
-        }
+        .fab-action-item i { font-size: 1.1rem; color: var(--green); }
+        .fab-action-item:hover { background: var(--blue); border-color: white; transform: translateX(-4px); }
         .fab-phrase {
             background: rgba(0,0,0,0.8);
             border-color: var(--green);
@@ -510,80 +472,26 @@
             white-space: nowrap;
             pointer-events: none;
         }
-        /* Lightbox Modal */
-        .lightbox {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .lightbox-content {
-            max-width: 90vw;
-            max-height: 90vh;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
-        }
-        .lightbox-content video {
-            width: 100%;
-            height: auto;
-            max-height: 90vh;
-            display: block;
-        }
-        /* Mobile specific: hide navbar, adjust text, menu overflow */
+        /* Mobile specific overrides */
         @media (max-width: 900px) {
-            .navbar {
-                display: none;
-            }
-            .hero-grid {
-                grid-template-columns: 1fr;
-                gap: 32px;
-            }
-            .hero-headline {
-                font-size: 2.4rem;
-            }
-            .hero-headline span {
-                display: block;
-            }
-            .container {
-                padding: 0 24px;
-            }
-            .section-title {
-                font-size: 2rem;
-            }
-            .support-text {
-                max-width: 100%;
-                text-align: left;
-            }
-            .fab-actions {
-                max-height: 65vh;
-                overflow-y: auto;
-                scrollbar-width: thin;
-            }
-            .fab-action-item, .fab-phrase {
-                white-space: nowrap;
-                font-size: 0.85rem;
-                padding: 8px 18px;
-            }
+            .navbar { display: none; }
+            .hero-grid { grid-template-columns: 1fr; gap: 40px; text-align: left; padding: 40px 0; }
+            .hero-headline { font-size: 2.4rem; }
+            .hero-headline span { display: block; }
+            .container { padding: 0 24px; }
+            .section-title { font-size: 2rem; }
+            .support-text { max-width: 100%; text-align: left; }
+            .statement-grid { grid-template-columns: 1fr; gap: 28px; }
+            .fab-actions { max-height: 65vh; }
+            .fab-action-item, .fab-phrase { white-space: nowrap; font-size: 0.85rem; padding: 8px 18px; }
         }
-        @media (max-width: 640px) {
-            .pricing-card {
-                min-width: 100%;
-            }
-            .fab-action-item {
-                font-size: 0.8rem;
-            }
-            .fab-phrase {
-                font-size: 0.75rem;
-                white-space: nowrap;
-            }
-        }
-        .support-text {
-            text-align: left;
+        @media (max-width: 600px) {
+            .container { padding: 0 16px; }
+            section { padding: 60px 0; }
+            .hero-grid { padding: 0; }
+            .video-trigger-container { border-radius: 20px; }
+            .contact-form-section, .contact-card { padding: 32px 24px; }
+            .form-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -591,7 +499,7 @@
 <div id="root"></div>
 <script type="text/babel" data-presets="react">
 
-// Get Framer Motion from UMD
+// Get Framer Motion
 const MotionLib = window.Motion || {};
 const motion = MotionLib.motion || window.motion;
 const MotionComponent = motion || { div: (props) => React.createElement('div', props) };
@@ -658,22 +566,17 @@ function initThreeBackground() {
     });
 }
 
-// Smooth scroll helper
 function scrollToSection(id) {
-    const element = document.getElementById(id);
-    if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// Main Component
 const SocialEditLanding = () => {
     const [lightboxOpen, setLightboxOpen] = React.useState(false);
     const videoSrc = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4";
     
     React.useEffect(() => {
         initThreeBackground();
-        // FAB toggle and close on outside click
         const fab = document.getElementById('fab');
         if (fab) {
             const btn = fab.querySelector('.fab-main');
@@ -684,9 +587,7 @@ const SocialEditLanding = () => {
                 };
             }
             document.addEventListener('click', (e) => {
-                if (!fab.contains(e.target)) {
-                    fab.classList.remove('open');
-                }
+                if (!fab.contains(e.target)) fab.classList.remove('open');
             });
         }
     }, []);
@@ -720,11 +621,11 @@ const SocialEditLanding = () => {
     
     return React.createElement('div', { className: 'site-content' },
         React.createElement('canvas', { id: 'three-canvas' }),
-        // Navbar (hidden on mobile via CSS)
+        // Navbar (hidden on mobile)
         React.createElement('div', { className: 'container' },
             React.createElement('div', { className: 'navbar' },
-                React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', alt: 'Social Edit Co.', style: { height: '52px' } }),
-                React.createElement('div', { className: 'nav-links' },
+                React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', alt: 'Social Edit Co.' }),
+                React.createElement('div', { className: 'nav-links', style: { display: 'flex', gap: '32px', alignItems: 'center' } },
                     React.createElement('a', { href: '#services' }, 'Services'),
                     React.createElement('a', { href: '#work' }, 'Sample Posts'),
                     React.createElement('a', { href: '#about' }, 'About'),
@@ -732,8 +633,8 @@ const SocialEditLanding = () => {
                 )
             )
         ),
-        // Hero Section with clickable video lightbox
-        React.createElement('section', { style: { paddingTop: '20px' } },
+        // Hero with clean video container
+        React.createElement('section', null,
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
                     React.createElement('div', null,
@@ -749,25 +650,26 @@ const SocialEditLanding = () => {
                             React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
                         )
                     ),
-                    React.createElement('div', { className: 'hero-video-wrapper', onClick: () => setLightboxOpen(true) },
+                    React.createElement('div', { className: 'video-trigger-container', onClick: () => setLightboxOpen(true) },
                         React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
                             React.createElement('source', { src: videoSrc, type: 'video/mp4' })
                         ),
-                        React.createElement('div', { style: { textAlign: 'center', padding: '8px', background: 'rgba(0,0,0,0.5)', color: 'white', fontSize: '12px', fontWeight: 500 } }, '🎬 Click to enlarge')
+                        React.createElement('div', { className: 'play-overlay' }, React.createElement('i', { className: 'fas fa-play-circle' }))
                     )
                 )
             )
         ),
-        // Lightbox Modal
+        // Lightbox
         lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => setLightboxOpen(false) },
             React.createElement('div', { className: 'lightbox-content', onClick: (e) => e.stopPropagation() },
-                React.createElement('video', { src: videoSrc, controls: true, autoPlay: true, playsInline: true, style: { width: '100%', height: 'auto' } })
+                React.createElement('button', { className: 'close-lightbox', onClick: () => setLightboxOpen(false) }, 'CLOSE ✕'),
+                React.createElement('video', { src: videoSrc, controls: true, autoPlay: true, playsInline: true })
             )
         ),
-        // Statement Section
+        // Statement
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
-                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true, margin: '-60px' } },
+                React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
                     React.createElement('div', { className: 'statement-grid' },
                         React.createElement('div', { className: 'statement-big' }, 'You don’t need more ideas. You need consistency.'),
                         React.createElement('div', { className: 'quote-block' }, '“Most businesses don’t lose on social media because they’re bad… they lose because they stop.”')
@@ -798,7 +700,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
-        // Services / Pricing
+        // Pricing
         React.createElement('section', { id: 'services' },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
@@ -817,7 +719,7 @@ const SocialEditLanding = () => {
                 React.createElement('div', { style: { textAlign: 'center', marginTop: '20px', color: '#527A6B' } }, 'No contracts. No burnout. Just consistency that compounds.')
             )
         ),
-        // Sample Posts Gallery
+        // Sample Posts
         React.createElement('section', { id: 'work' },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
@@ -831,7 +733,7 @@ const SocialEditLanding = () => {
                 ))
             )
         ),
-        // About Amy
+        // About
         React.createElement('section', { id: 'about' },
             React.createElement('div', { className: 'container' },
                 React.createElement('div', { className: 'about-grid' },
@@ -855,7 +757,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
-        // Contact Form Section
+        // Contact Form
         React.createElement('div', { className: 'container', id: 'contact-form' },
             React.createElement('div', { className: 'contact-form-section' },
                 React.createElement('h2', { className: 'section-title', style: { marginBottom: '8px' } }, 'Let’s Get You Consistent'),
@@ -877,7 +779,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
-        // Contact Card (footer info)
+        // Footer Contact Card
         React.createElement('div', { className: 'container' },
             React.createElement('div', { className: 'contact-card' },
                 React.createElement('div', null,
@@ -897,7 +799,7 @@ const SocialEditLanding = () => {
         React.createElement('div', { className: 'footer-bottom' },
             React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
         ),
-        // Floating Menu (FAB) - includes Call, Email, and navigation links
+        // Floating Menu (FAB)
         React.createElement('div', { className: 'fab', id: 'fab' },
             React.createElement('div', { className: 'fab-main' }, React.createElement('i', { className: 'fas fa-plus' })),
             React.createElement('div', { className: 'fab-actions' },
