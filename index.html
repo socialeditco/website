@@ -6,19 +6,20 @@
     <title>Social Edit Co. | Consistency as a Service</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (icons only, no emojis) -->
+    <!-- Font Awesome 6 (icons only) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- React + ReactDOM UMD -->
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-    <!-- Babel Standalone for JSX -->
+    <!-- Babel Standalone -->
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
-    <!-- Three.js Core - isolated module -->
+    <!-- Three.js Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Framer Motion UMD -->
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <!-- GSAP for floating menu smoothness (optional but adds polish) -->
+    <!-- GSAP for smooth parallax -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -138,40 +139,26 @@
             max-width: 700px;
             margin-bottom: 40px;
         }
-        /* Hero grid - laptop frame */
+        /* Hero grid - no frame, raw video with parallax on mobile */
         .hero-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 48px;
             align-items: center;
         }
-        .laptop-frame {
-            background: #E2E8E2;
-            border-radius: 28px 28px 20px 20px;
-            padding: 16px 16px 40px 16px;
-            box-shadow: var(--shadow-md);
-            position: relative;
-        }
-        .laptop-screen {
-            background: #000;
-            border-radius: 16px;
+        .hero-video-wrapper {
+            border-radius: 28px;
             overflow: hidden;
-            aspect-ratio: 16 / 9;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+            box-shadow: var(--shadow-md);
+            background: #E2E8E2;
+            transform: translateZ(0);
         }
-        .laptop-screen video {
+        .hero-video-wrapper video {
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: auto;
             display: block;
-        }
-        .laptop-base {
-            height: 8px;
-            background: #B0B7B0;
-            width: 60%;
-            margin: 0 auto;
-            border-radius: 0 0 8px 8px;
-            margin-top: -4px;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
         }
         .hero-badge {
             background: rgba(101,196,102,0.15);
@@ -225,6 +212,9 @@
             font-size: 1rem;
             color: #557268;
             max-width: 85%;
+            text-align: left;
+            margin-left: 0;
+            margin-right: auto;
         }
         /* Marquee */
         .marquee-wrapper {
@@ -246,7 +236,7 @@
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
-        /* Pain Points - icon only */
+        /* Pain Points */
         .pain-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -318,7 +308,7 @@
             font-size: 0.85rem;
             font-weight: 500;
         }
-        /* Sample Posts Gallery - fixed cropping */
+        /* Sample Posts Gallery */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -330,9 +320,6 @@
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             background: #F3F5F0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             transition: all 0.3s;
         }
         .gallery-item img {
@@ -350,9 +337,6 @@
             grid-template-columns: 1fr 1fr;
             gap: 48px;
             align-items: start;
-        }
-        .about-img {
-            position: relative;
         }
         .about-img img {
             width: 100%;
@@ -383,7 +367,7 @@
             color: var(--green);
             width: 22px;
         }
-        /* Contact & Form Section */
+        /* Contact & Form */
         .contact-form-section {
             background: #FFFFFF;
             border-radius: 48px;
@@ -448,12 +432,13 @@
             font-size: 0.85rem;
             color: #7A9A8C;
         }
-        /* Floating Action Menu (inspired by attached) */
+        /* FLOATING MENU (FAB) - fixed visibility */
         .fab {
             position: fixed;
             bottom: 28px;
             right: 28px;
-            z-index: 1000;
+            z-index: 9999;
+            display: block;
         }
         .fab-main {
             width: 58px;
@@ -521,29 +506,65 @@
             border: 1px solid var(--green);
             white-space: nowrap;
         }
+        /* Mobile specific: video parallax + no frame, and paragraph center-left */
         @media (max-width: 900px) {
-            .hero-grid, .statement-grid, .about-grid, .contact-card, .form-grid {
+            .hero-grid {
                 grid-template-columns: 1fr;
+                gap: 32px;
             }
-            .hero-headline { font-size: 2.4rem; }
-            .hero-headline span { display: block; }
-            .container { padding: 0 24px; }
-            .section-title { font-size: 2rem; }
-            .support-text { max-width: 100%; text-align: center; }
-            .statement-grid .statement-big { text-align: center; }
-            .quote-block { text-align: center; }
+            .hero-headline {
+                font-size: 2.4rem;
+            }
+            .hero-headline span {
+                display: block;
+            }
+            .container {
+                padding: 0 24px;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .support-text {
+                max-width: 100%;
+                text-align: left;
+                margin-left: 0;
+                margin-right: auto;
+            }
+            .statement-grid .statement-big {
+                text-align: left;
+            }
+            .quote-block {
+                text-align: left;
+            }
+            /* Parallax video wrapper for mobile - slide effect */
+            .hero-video-wrapper {
+                transform: translateY(0);
+                transition: transform 0.1s linear;
+                will-change: transform;
+            }
         }
         @media (max-width: 640px) {
-            .navbar { flex-direction: column; }
-            .nav-links { gap: 20px; }
-            .pricing-card { min-width: 100%; }
-            .fab-action-item { padding: 8px 16px; font-size: 0.8rem; }
+            .navbar {
+                flex-direction: column;
+            }
+            .nav-links {
+                gap: 20px;
+            }
+            .pricing-card {
+                min-width: 100%;
+            }
+            .fab-action-item {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+            .fab-phrase {
+                font-size: 0.75rem;
+                white-space: nowrap;
+            }
         }
-        .no-emoji i {
-            font-style: normal;
-        }
-        .icon-text {
-            margin-right: 6px;
+        /* Additional alignment fix for support text on desktop */
+        .support-text {
+            text-align: left;
         }
     </style>
 </head>
@@ -556,7 +577,7 @@ const MotionLib = window.Motion || {};
 const motion = MotionLib.motion || window.motion;
 const MotionComponent = motion || { div: (props) => React.createElement('div', props) };
 
-// Three.js isolated background
+// Three.js background
 function initThreeBackground() {
     const canvas = document.getElementById('three-canvas');
     if (!canvas) return;
@@ -618,15 +639,40 @@ function initThreeBackground() {
     });
 }
 
+// Parallax effect for mobile video
+function initMobileVideoParallax() {
+    if (window.innerWidth > 900) return;
+    const videoWrapper = document.querySelector('.hero-video-wrapper');
+    if (!videoWrapper) return;
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        const maxScroll = 400;
+        const translateY = Math.min(scrollY * 0.25, 80);
+        videoWrapper.style.transform = `translateY(${translateY}px)`;
+    });
+}
+
 // Main Component
 const SocialEditLanding = () => {
     React.useEffect(() => {
         initThreeBackground();
-        // Floating menu toggle
+        initMobileVideoParallax();
+        // FAB toggle functionality
         const fab = document.getElementById('fab');
         if (fab) {
             const btn = fab.querySelector('.fab-main');
-            btn.onclick = () => fab.classList.toggle('open');
+            if (btn) {
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    fab.classList.toggle('open');
+                };
+            }
+            // Close when clicking outside? optional but fine
+            document.addEventListener('click', (e) => {
+                if (!fab.contains(e.target)) {
+                    fab.classList.remove('open');
+                }
+            });
         }
     }, []);
     
@@ -649,7 +695,6 @@ const SocialEditLanding = () => {
         { name: "Full Momentum", price: "$950", posts: "15 Posts / Month", features: ["Maximum consistency", "Strong brand identity", "Ongoing engagement + growth"], callout: "👉 This is where momentum builds.", popular: false }
     ];
     
-    // Form state
     const [formData, setFormData] = React.useState({ name: '', business: '', email: '', phone: '' });
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
     const handleSubmit = (e) => {
@@ -672,7 +717,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
-        // Hero with laptop video
+        // Hero Section - no laptop frame, just raw video with shadow
         React.createElement('section', { style: { paddingTop: '20px' } },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
@@ -689,13 +734,10 @@ const SocialEditLanding = () => {
                             React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
                         )
                     ),
-                    React.createElement('div', { className: 'laptop-frame' },
-                        React.createElement('div', { className: 'laptop-screen' },
-                            React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
-                                React.createElement('source', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4', type: 'video/mp4' })
-                            )
-                        ),
-                        React.createElement('div', { className: 'laptop-base' })
+                    React.createElement('div', { className: 'hero-video-wrapper' },
+                        React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
+                            React.createElement('source', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4', type: 'video/mp4' })
+                        )
                     )
                 )
             )
@@ -719,7 +761,7 @@ const SocialEditLanding = () => {
                 React.createElement('span', null, 'CONSISTENCY WINS'), ' • ', React.createElement('span', null, 'VISIBILITY MATTERS'), ' • ', React.createElement('span', null, 'ATTENTION IS EVERYTHING'), ' • ', React.createElement('span', null, 'CONSISTENCY WINS')
             )
         ),
-        // Pain Points with icons
+        // Pain Points
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
@@ -833,7 +875,7 @@ const SocialEditLanding = () => {
         React.createElement('div', { className: 'footer-bottom' },
             React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
         ),
-        // Floating Menu (FAB)
+        // Floating Menu (FAB) - now visible
         React.createElement('div', { className: 'fab', id: 'fab' },
             React.createElement('div', { className: 'fab-main' }, React.createElement('i', { className: 'fas fa-plus' })),
             React.createElement('div', { className: 'fab-actions' },
