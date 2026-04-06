@@ -4,18 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Social Edit Co. | Consistency as a Service</title>
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- React + ReactDOM UMD -->
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-    <!-- Babel Standalone -->
     <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
-    <!-- Three.js Core -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Framer Motion UMD -->
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
     <style>
         /* --- GLOBAL RESET & EXTRA CRISPY FOUNDATION --- */
@@ -48,19 +42,30 @@
             pointer-events: none;
             opacity: 0.35;
         }
+
+        /* =========================
+           GLOBAL DEPTH SYSTEM 
+           ========================= */
         .site-content {
             position: relative;
             z-index: 2;
             flex: 1;
             display: flex;
             flex-direction: column;
+            transition: transform 0.5s ease, filter 0.5s ease;
         }
+        .site-content.focus-mode {
+            transform: scale(0.96);
+            filter: blur(8px) brightness(0.85);
+        }
+
         .container {
             width: 100%;
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 32px;
         }
+
         /* Buttons */
         .btn {
             display: inline-flex;
@@ -94,7 +99,8 @@
             background: rgba(101,196,102,0.06);
             transform: translateY(-2px);
         }
-        /* --- TOP RIGHT HAMBURGER MENU (sole navigation) --- */
+
+        /* --- TOP RIGHT HAMBURGER MENU --- */
         .nav-toggle {
             position: fixed;
             top: 20px;
@@ -114,9 +120,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: background 0.2s;
         }
-        .nav-toggle:hover {
-            background: #0090b0;
-        }
+        .nav-toggle:hover { background: #0090b0; }
         .nav-toggle span {
             width: 26px;
             height: 3px;
@@ -140,9 +144,7 @@
             gap: 24px;
             box-shadow: -5px 0 30px rgba(0,0,0,0.2);
         }
-        .mobile-menu.open {
-            right: 0;
-        }
+        .mobile-menu.open { right: 0; }
         .mobile-menu a, .mobile-menu .menu-item {
             color: white;
             text-decoration: none;
@@ -164,6 +166,7 @@
             width: 24px;
             color: var(--green);
         }
+
         /* Hero & Video */
         .hero-grid {
             display: grid;
@@ -184,9 +187,7 @@
             cursor: pointer;
             transition: transform 0.2s;
         }
-        .lvl-video-frame:hover {
-            transform: scale(1.01);
-        }
+        .lvl-video-frame:hover { transform: scale(1.01); }
         .lvl-video-frame::before {
             content: '';
             position: absolute;
@@ -202,8 +203,9 @@
         }
         .lvl-video-frame video {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
-            pointer-events: none; /* so clicks go to wrapper */
         }
         .hero-badge {
             background: rgba(101,196,102,0.15);
@@ -222,9 +224,7 @@
             line-height: 1.2;
             margin-bottom: 20px;
         }
-        .hero-headline span {
-            display: inline;
-        }
+        .hero-headline span { display: inline; }
         .hero-desc {
             font-size: 1.05rem;
             color: #40655A;
@@ -232,43 +232,64 @@
             line-height: 1.5;
         }
         .btn-group { display: flex; gap: 16px; flex-wrap: wrap; }
-        /* Lightbox */
+
+        /* =========================
+           LIGHTBOX (GLASS STYLE)
+           ========================= */
         .lightbox {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 20000;
+            z-index: 99999;
+            background: rgba(20, 30, 28, 0.35);
+            backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            opacity: 0;
+            animation: fadeGlass 0.4s ease forwards;
+            animation-delay: 0.3s;
+        }
+        @keyframes fadeGlass {
+            to { opacity: 1; }
         }
         .lightbox-content {
             width: 100%;
-            max-width: 1100px;
-            aspect-ratio: 16 / 9;
-            background: #000;
-            border-radius: 20px;
+            max-width: min(1100px, 95vw);
+            border-radius: 24px;
             overflow: hidden;
-            position: relative;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+            transform: scale(0.92);
+            animation: zoomIn 0.35s cubic-bezier(0.2, 1.2, 0.3, 1) forwards;
+            aspect-ratio: 16 / 9; /* Maintains shape for both video and images */
         }
         .lightbox-content video, .lightbox-content img {
             width: 100%;
             height: 100%;
+            display: block;
             object-fit: contain;
         }
         .close-lightbox {
             position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            background: none;
+            top: 20px;
+            right: 20px;
+            z-index: 2;
+            background: rgba(255,255,255,0.1);
             border: none;
-            font-size: 1rem;
-            font-weight: 600;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 999px;
             cursor: pointer;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
         }
-        /* Statement, Marquee, Pain Points, Pricing */
+        @keyframes zoomIn {
+            to { transform: scale(1); }
+        }
+
+        /* Global Sections */
         section {
             padding: 80px 0;
             border-bottom: 1px solid #E4EAE2;
@@ -287,80 +308,25 @@
             max-width: 700px;
             margin-bottom: 40px;
         }
-        .statement-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            margin-bottom: 32px;
-        }
-        .statement-big {
-            font-size: 2rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-        .quote-block {
-            background: #EDF3EA;
-            padding: 28px;
-            border-radius: var(--radius-lg);
-            font-size: 1.25rem;
-            font-weight: 500;
-            border-left: 5px solid var(--green);
-        }
-        .support-text {
-            margin-top: 24px;
-            font-size: 1rem;
-            color: #557268;
-            max-width: 85%;
-            text-align: left;
-        }
-        .marquee-wrapper {
-            background: #1A2F2A;
-            color: white;
-            padding: 22px 0;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .marquee-track {
-            display: inline-block;
-            animation: scrollMarquee 20s linear infinite;
-            font-weight: 700;
-            font-size: 1.4rem;
-            letter-spacing: 1px;
-        }
+
+        /* Statement & Pain Points */
+        .statement-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 32px; }
+        .statement-big { font-size: 2rem; font-weight: 700; line-height: 1.3; }
+        .quote-block { background: #EDF3EA; padding: 28px; border-radius: var(--radius-lg); font-size: 1.25rem; font-weight: 500; border-left: 5px solid var(--green); }
+        .support-text { margin-top: 24px; font-size: 1rem; color: #557268; max-width: 85%; text-align: left; }
+        .marquee-wrapper { background: #1A2F2A; color: white; padding: 22px 0; overflow: hidden; white-space: nowrap; }
+        .marquee-track { display: inline-block; animation: scrollMarquee 20s linear infinite; font-weight: 700; font-size: 1.4rem; letter-spacing: 1px; }
         .marquee-track span { margin: 0 28px; }
-        @keyframes scrollMarquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .pain-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 24px;
-            margin: 48px 0 32px;
-        }
-        .pain-card {
-            background: white;
-            padding: 28px 20px;
-            border-radius: 24px;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid #E2E8E0;
-            text-align: center;
-        }
+        @keyframes scrollMarquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin: 48px 0 32px; }
+        .pain-card { background: white; padding: 28px 20px; border-radius: 24px; box-shadow: var(--shadow-sm); border: 1px solid #E2E8E0; text-align: center; }
         .pain-icon { font-size: 2.2rem; margin-bottom: 16px; color: var(--blue); }
-        .close-bold {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-top: 16px;
-            padding-top: 20px;
-            border-top: 2px solid #DDE5DC;
-        }
-        .pricing-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 32px;
-            justify-content: center;
-            margin: 48px 0 24px;
-        }
+        .close-bold { font-size: 1.3rem; font-weight: 700; margin-top: 16px; padding-top: 20px; border-top: 2px solid #DDE5DC; }
+
+        /* =========================
+           CARD SYSTEM (PRICING)
+           ========================= */
+        .pricing-grid { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; margin: 48px 0 24px; }
         .pricing-card {
             background: white;
             border-radius: 32px;
@@ -368,135 +334,104 @@
             flex: 1;
             min-width: 260px;
             box-shadow: var(--shadow-sm);
-            transition: all 0.2s;
             border: 1px solid #E2E9E2;
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
         }
         .pricing-card.popular {
             border-top: 4px solid var(--blue);
-            transform: scale(1.02);
             box-shadow: var(--shadow-md);
+        }
+        .pricing-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        /* When one is active */
+        .pricing-card.active {
+            transform: scale(1.05);
+            z-index: 2;
+            border-color: var(--blue);
+        }
+        /* Fade others */
+        .pricing-grid:has(.pricing-card.active) .pricing-card:not(.active) {
+            opacity: 0.5;
+            transform: scale(0.98);
         }
         .price { font-size: 2.6rem; font-weight: 800; margin: 16px 0 8px; }
         .pricing-features { list-style: none; margin: 24px 0; }
         .pricing-features li { margin: 12px 0; display: flex; gap: 10px; align-items: center; }
-        .callout {
-            background: #F3F8F1;
-            padding: 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-        /* GALLERY - double-tap / click lightbox, clip-path hover */
+        .callout { background: #F3F8F1; padding: 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
+
+        /* =========================
+           EPIC GALLERY SYSTEM
+           ========================= */
         .gallery {
-            --size: 140px;
+            --size: clamp(110px, 18vw, 160px);
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(var(--size), 1fr));
-            gap: 20px;
+            gap: clamp(12px, 2vw, 22px);
             margin-top: 32px;
         }
         .gallery-item {
-            background: transparent;
-            border-radius: 24px;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative;
+            border-radius: 28px;
+            overflow: visible;
             cursor: pointer;
-            transition: transform 0.2s;
+            perspective: 1000px;
         }
-        .gallery-item:hover {
-            transform: scale(1.02);
+        .gallery-inner {
+            border-radius: 28px;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .gallery-item img {
             width: 100%;
-            max-width: 100%;
             aspect-ratio: 1/1;
             object-fit: cover;
-            clip-path: path("M90,10 C100,0 100,0 110,10 190,90 190,90 190,90 200,100 200,100 190,110 190,110 110,190 110,190 100,200 100,200 90,190 90,190 10,110 10,110 0,100 0,100 10,90Z");
-            transition: clip-path 0.3s ease, transform 0.3s;
+            /* Morphing organic shape */
+            clip-path: polygon(12% 8%, 88% 6%, 96% 28%, 92% 78%, 80% 94%, 20% 96%, 6% 70%, 4% 22%);
+            transition: clip-path 0.5s cubic-bezier(0.4, 1.4, 0.4, 1), transform 0.5s ease;
         }
-        .gallery-item:hover img {
-            clip-path: path("M0,0 C0,0 200,0 200,0 200,0 200,100 200,100 200,100 200,200 200,200 200,200 100,200 100,200 100,200 100,200 0,200 0,200 0,100 0,100 0,100 0,100 0,100Z");
+        /* Hover / Tap Morph */
+        .gallery-item:hover img, .gallery-item.active img {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+            transform: scale(1.08);
         }
-        /* About Section */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 48px;
-            align-items: center;
+        /* Lift + Tilt (desktop only) */
+        @media (hover: hover) {
+            .gallery-item:hover .gallery-inner {
+                transform: rotateX(6deg) rotateY(-6deg) scale(1.04);
+            }
         }
-        .about-img {
-            text-align: center;
-        }
-        .about-img img {
-            width: 280px;
-            border-radius: 50%;
-            border: 4px solid var(--blue);
-            object-fit: cover;
-            aspect-ratio: 1/1;
-        }
-        .founded-text {
-            margin-top: 16px;
-            font-size: 0.9rem;
-            color: var(--blue);
-            font-weight: 600;
-            text-align: center;
-        }
+
+        /* About & Contact */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+        .about-img { text-align: center; }
+        .about-img img { width: 280px; border-radius: 50%; border: 4px solid var(--blue); object-fit: cover; aspect-ratio: 1/1; }
+        .founded-text { margin-top: 16px; font-size: 0.9rem; color: var(--blue); font-weight: 600; text-align: center; }
         .checklist { list-style: none; margin: 24px 0; }
         .checklist li { margin: 14px 0; display: flex; gap: 12px; align-items: flex-start; }
         .checklist i { color: var(--green); width: 22px; margin-top: 2px; }
-        /* Contact Form */
-        .contact-form-section {
-            background: #FFFFFF;
-            border-radius: 48px;
-            padding: 48px 40px;
-            margin: 0 0 48px 0;
-            box-shadow: var(--shadow-md);
-            border: 1px solid #E4EAE2;
-        }
+
+        .contact-form-section { background: #FFFFFF; border-radius: 48px; padding: 48px 40px; margin: 0 0 48px 0; box-shadow: var(--shadow-md); border: 1px solid #E4EAE2; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #2F4D45; }
-        .input-group input {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 16px;
-            border: 1px solid #D4DDD4;
-            background: #FEFEF9;
-            font-family: 'Inter', sans-serif;
-        }
+        .input-group input { width: 100%; padding: 14px 18px; border-radius: 16px; border: 1px solid #D4DDD4; background: #FEFEF9; font-family: 'Inter', sans-serif; }
         .input-group input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 2px rgba(0,172,210,0.2); }
         .optional { font-size: 0.75rem; color: #7A9A8C; margin-left: 6px; }
-        /* Footer Contact Card - uniform alignment */
-        .contact-card {
-            background: #1E2E2A;
-            border-radius: 48px;
-            padding: 48px 40px;
-            color: white;
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 40px;
-            margin-top: 24px;
-        }
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .contact-info p {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-align: left;
-            margin: 0;
-        }
+
+        /* Footer Alignment */
+        .contact-card { background: #1E2E2A; border-radius: 48px; padding: 48px 40px; color: white; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; margin-top: 24px; }
+        .contact-info p { margin: 16px 0; display: flex; align-items: center; gap: 14px; text-align: left; }
         .footer-bottom { text-align: center; margin-top: 48px; padding: 24px 0 40px; font-size: 0.85rem; color: #7A9A8C; }
+
         /* Mobile overrides */
         @media (max-width: 900px) {
             .container { padding: 0 24px; }
-            .hero-grid { grid-template-columns: 1fr; gap: 40px; text-align: left; padding: 40px 0; }
+            .hero-grid { grid-template-columns: 1fr; text-align: left; padding: 40px 0; }
             .hero-headline { font-size: 2.4rem; }
-            .hero-headline span { display: block; }
             .section-title { font-size: 2rem; }
             .support-text { max-width: 100%; text-align: left; }
             .statement-grid { grid-template-columns: 1fr; gap: 28px; }
@@ -505,22 +440,16 @@
             .about-content { order: 2; }
             .contact-card { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px; }
             .contact-card .logo-horizontal { margin: 0 auto 20px; display: block; }
-            .contact-info { align-items: flex-start; display: inline-flex; width: auto; text-align: left; }
+            .contact-info { align-items: flex-start; display: inline-flex; width: auto; flex-direction: column; gap: 0;}
+            .contact-info p { justify-content: flex-start; }
             .form-grid { grid-template-columns: 1fr; }
-            .checklist li { font-size: 0.9rem; line-height: 1.3; align-items: flex-start; }
+            .checklist li { font-size: 0.9rem; line-height: 1.3; align-items: flex-start; text-align: left; }
         }
         @media (min-width: 901px) {
-            .contact-card div:last-child {
-                border-left: 1px solid rgba(255,255,255,0.1);
-                padding-left: 40px;
-                text-align: left;
-            }
-            .contact-card .logo-horizontal {
-                margin: 0 0 15px 0 !important;
-            }
+            .contact-card div:last-child { border-left: 1px solid rgba(255,255,255,0.1); padding-left: 40px; text-align: left; }
+            .contact-card .logo-horizontal { margin: 0 0 15px 0 !important; }
         }
         @media (max-width: 600px) {
-            .gallery { --size: 110px; gap: 12px; }
             .contact-form-section, .contact-card { padding: 32px 24px; }
         }
     </style>
@@ -534,7 +463,7 @@ const MotionLib = window.Motion || {};
 const motion = MotionLib.motion || window.motion;
 const MotionComponent = motion || { div: (props) => React.createElement('div', props) };
 
-// Three.js background (same as before)
+// Three.js background
 function initThreeBackground() {
     const canvas = document.getElementById('three-canvas');
     if (!canvas) return;
@@ -604,54 +533,102 @@ function scrollToSection(id) {
 const SocialEditLanding = () => {
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [lightboxOpen, setLightboxOpen] = React.useState(false);
-    const [lightboxMedia, setLightboxMedia] = React.useState(null); // null = video, else image src
+    const [lightboxMedia, setLightboxMedia] = React.useState(null); 
+    const [focusMode, setFocusMode] = React.useState(false);
+    const [animating, setAnimating] = React.useState(false);
+    const [activeCard, setActiveCard] = React.useState(null);
+
     const videoUrl = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d3341284c045c274814fd2.mp4";
     const emailLink = "mailto:info@socialeditco.com?subject=Contact%20me%20to%20go%20over%20the%20best%20options%20for%20my%20business";
     
+    // Magnetic Cursor Effect
+    React.useEffect(() => {
+        const items = document.querySelectorAll('.gallery-item');
+        items.forEach(item => {
+            item.addEventListener('mousemove', (e) => {
+                const rect = item.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                item.querySelector('.gallery-inner').style.transform = `rotateX(${y * -10}deg) rotateY(${x * 10}deg) scale(1.05)`;
+            });
+            item.addEventListener('mouseleave', () => {
+                item.querySelector('.gallery-inner').style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
+    }, []);
+
     React.useEffect(() => {
         initThreeBackground();
-        if (menuOpen) {
+        if (menuOpen || lightboxOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = '';
         }
-    }, [menuOpen]);
-    
-    // Double-tap detection for gallery images
-    let lastTap = 0;
-    let tapTimer = null;
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    
-    const handleImageInteraction = (src) => {
-        if (isTouchDevice) {
-            // Double-tap logic for mobile
-            const now = Date.now();
-            if (now - lastTap < 300) {
-                // double tap detected
-                if (tapTimer) clearTimeout(tapTimer);
-                setLightboxMedia(src);
-                setLightboxOpen(true);
-                lastTap = 0;
-            } else {
-                lastTap = now;
-                // single tap does nothing (just CSS transition)
-                if (tapTimer) clearTimeout(tapTimer);
-                tapTimer = setTimeout(() => {
-                    lastTap = 0;
-                }, 300);
-            }
-        } else {
-            // Desktop: single click opens lightbox
+    }, [menuOpen, lightboxOpen]);
+
+    // =========================
+    // SHARED TRANSITION ENGINE (FLIP)
+    // =========================
+    const openLightboxFLIP = (el, src) => {
+        if (animating) return;
+        setAnimating(true);
+        setFocusMode(true); 
+
+        const rect = el.getBoundingClientRect();
+        const clone = el.cloneNode(true);
+
+        clone.style.position = 'fixed';
+        clone.style.top = rect.top + 'px';
+        clone.style.left = rect.left + 'px';
+        clone.style.width = rect.width + 'px';
+        clone.style.height = rect.height + 'px';
+        clone.style.margin = 0;
+        clone.style.zIndex = 999999;
+        clone.style.borderRadius = '24px';
+        clone.style.transition = 'all 0.5s cubic-bezier(0.2, 1, 0.3, 1)';
+        clone.style.objectFit = 'cover';
+
+        document.body.appendChild(clone);
+        clone.getBoundingClientRect(); // Force repaint
+
+        const targetWidth = Math.min(window.innerWidth * 0.9, 1100);
+        const targetHeight = targetWidth * 0.5625; // Aspect Ratio 16:9
+
+        clone.style.top = (window.innerHeight / 2 - targetHeight / 2) + 'px';
+        clone.style.left = (window.innerWidth / 2 - targetWidth / 2) + 'px';
+        clone.style.width = targetWidth + 'px';
+        clone.style.height = targetHeight + 'px';
+        clone.style.borderRadius = '20px';
+
+        setTimeout(() => {
             setLightboxMedia(src);
             setLightboxOpen(true);
+            document.body.removeChild(clone);
+            setAnimating(false);
+        }, 500);
+    };
+
+    const isTouchDevice = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    const lastTap = React.useRef(0);
+
+    const handleImageInteraction = (e, src) => {
+        const targetEl = e.currentTarget.querySelector('img') || e.currentTarget;
+        if (isTouchDevice) {
+            const now = Date.now();
+            if (now - lastTap.current < 300) {
+                openLightboxFLIP(targetEl, src);
+                lastTap.current = 0;
+            } else {
+                lastTap.current = now;
+            }
+        } else {
+            openLightboxFLIP(targetEl, src);
         }
     };
-    
-    // Hero video: only open lightbox on desktop (width > 900)
-    const handleHeroVideoClick = () => {
+
+    const handleHeroVideoClick = (e) => {
         if (window.innerWidth > 900) {
-            setLightboxMedia(null);
-            setLightboxOpen(true);
+            openLightboxFLIP(e.currentTarget, null);
         }
     };
     
@@ -682,7 +659,7 @@ const SocialEditLanding = () => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
     };
     
-    return React.createElement('div', { className: 'site-content' },
+    return React.createElement('div', { className: `site-content ${focusMode ? 'focus-mode' : ''}` },
         React.createElement('canvas', { id: 'three-canvas' }),
         
         // Hamburger Menu Toggle
@@ -705,8 +682,8 @@ const SocialEditLanding = () => {
                     React.createElement('div', null,
                         React.createElement('div', { className: 'hero-badge' }, 'Consistency as a service'),
                         React.createElement('h1', { className: 'hero-headline' },
-                            React.createElement('span', null, 'Stay Active'),
-                            React.createElement('span', null, 'Stay Relevant'),
+                            React.createElement('span', null, 'Stay Active'), ' ',
+                            React.createElement('span', null, 'Stay Relevant'), ' ',
                             React.createElement('span', null, 'Stay Growing')
                         ),
                         React.createElement('p', { className: 'hero-desc' }, 'Most businesses don’t fail on social media… they just disappear. We make sure you don’t. Consistent, branded content that keeps you visible — without you lifting a finger.'),
@@ -724,10 +701,10 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Lightbox
-        lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => setLightboxOpen(false) },
+        // FLIP Lightbox 
+        lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => { setLightboxOpen(false); setFocusMode(false); } },
             React.createElement('div', { className: 'lightbox-content', onClick: (e) => e.stopPropagation() },
-                React.createElement('button', { className: 'close-lightbox', onClick: () => setLightboxOpen(false) }, 'CLOSE ✕'),
+                React.createElement('button', { className: 'close-lightbox', onClick: () => { setLightboxOpen(false); setFocusMode(false); } }, 'CLOSE ✕'),
                 lightboxMedia 
                     ? React.createElement('img', { src: lightboxMedia, alt: 'full size' })
                     : React.createElement('video', { src: videoUrl, autoPlay: true, muted: true, loop: true, playsInline: true })
@@ -779,7 +756,15 @@ const SocialEditLanding = () => {
                     React.createElement('div', { className: 'section-sub' }, 'No fluff. No overcomplication. Just showing up — the right way — every time.')
                 ),
                 React.createElement('div', { className: 'pricing-grid' }, pricingPlans.map((plan, idx) =>
-                    React.createElement(MotionComponent.div, { key: idx, className: `pricing-card ${plan.popular ? 'popular' : ''}`, whileHover: { y: -6 }, initial: { opacity: 0, y: 30 }, whileInView: { opacity: 1, y: 0 }, transition: { delay: idx * 0.08 } },
+                    React.createElement(MotionComponent.div, { 
+                        key: idx, 
+                        className: `pricing-card ${plan.popular ? 'popular' : ''} ${activeCard === idx ? 'active' : ''}`, 
+                        onClick: () => setActiveCard(idx),
+                        onMouseLeave: () => setActiveCard(null),
+                        initial: { opacity: 0, y: 30 }, 
+                        whileInView: { opacity: 1, y: 0 }, 
+                        transition: { delay: idx * 0.08 } 
+                    },
                         React.createElement('h3', { style: { fontSize: '1.6rem' } }, plan.name),
                         React.createElement('div', { className: 'price' }, plan.price, React.createElement('span', { style: { fontSize: '1rem' } }, ' / month')),
                         React.createElement('p', { style: { fontWeight: 500 } }, plan.posts),
@@ -791,7 +776,7 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Gallery with double-tap / click logic
+        // Gallery with FLIP
         React.createElement('section', { id: 'work' },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true } },
@@ -799,14 +784,16 @@ const SocialEditLanding = () => {
                     React.createElement('div', { className: 'section-sub' }, 'Real results, real aesthetics — content that actually connects.')
                 ),
                 React.createElement('div', { className: 'gallery' }, galleryItems.map((src, i) =>
-                    React.createElement('div', { key: i, className: 'gallery-item', onClick: () => handleImageInteraction(src) },
-                        React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
+                    React.createElement('div', { key: i, className: 'gallery-item', onClick: (e) => handleImageInteraction(e, src) },
+                        React.createElement('div', { className: 'gallery-inner' },
+                            React.createElement('img', { src: src, alt: 'social post', loading: 'lazy' })
+                        )
                     )
                 ))
             )
         ),
         
-        // About Amy (shortened checklist line)
+        // About
         React.createElement('section', { id: 'about' },
             React.createElement('div', { className: 'container' },
                 React.createElement('div', { className: 'about-grid' },
@@ -821,7 +808,7 @@ const SocialEditLanding = () => {
                         React.createElement('ul', { className: 'checklist' },
                             React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more “I forgot to post this week”'),
                             React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more inconsistent branding'),
-                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more unreliable freelancers') // shortened for mobile
+                            React.createElement('li', null, React.createElement('i', { className: 'fas fa-check-circle' }), ' No more unreliable freelancers')
                         ),
                         React.createElement('p', null, 'We don’t overcomplicate it. We just make sure it gets done — consistently.')
                     )
@@ -829,7 +816,7 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Contact Form with updated button text
+        // Contact Form
         React.createElement('div', { className: 'container', id: 'contact-form' },
             React.createElement('div', { className: 'contact-form-section' },
                 React.createElement('h2', { className: 'section-title', style: { marginBottom: '8px' } }, 'Let’s Get You Consistent'),
@@ -852,7 +839,7 @@ const SocialEditLanding = () => {
             )
         ),
         
-        // Footer Contact Card (perfect alignment)
+        // Footer Contact Card
         React.createElement('div', { className: 'container' },
             React.createElement('div', { className: 'contact-card' },
                 React.createElement('div', null,
@@ -871,7 +858,7 @@ const SocialEditLanding = () => {
         ),
         
         React.createElement('div', { className: 'footer-bottom' },
-            React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
+            React.createElement('p', null, '© 2026 Social Edit Co. — Consistency as a Service. All rights reserved.')
         )
     );
 };
