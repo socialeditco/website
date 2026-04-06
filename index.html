@@ -1,3 +1,5 @@
+I've removed the parallax effect, added a video lightbox (click to enlarge), hidden the header on mobile, and enhanced the floating menu with full navigation that never overflows the screen.
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +8,7 @@
     <title>Social Edit Co. | Consistency as a Service</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome 6 (icons only) -->
+    <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- React + ReactDOM UMD -->
     <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
@@ -17,9 +19,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- Framer Motion UMD -->
     <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <!-- GSAP for smooth parallax -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -95,7 +94,7 @@
             background: rgba(101,196,102,0.06);
             transform: translateY(-2px);
         }
-        /* Navbar */
+        /* Navbar - hidden on mobile */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -139,7 +138,7 @@
             max-width: 700px;
             margin-bottom: 40px;
         }
-        /* Hero grid - no frame, raw video with parallax on mobile */
+        /* Hero grid - video with clickable lightbox */
         .hero-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -151,7 +150,11 @@
             overflow: hidden;
             box-shadow: var(--shadow-md);
             background: #E2E8E2;
-            transform: translateZ(0);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .hero-video-wrapper:hover {
+            transform: scale(1.01);
         }
         .hero-video-wrapper video {
             width: 100%;
@@ -159,6 +162,7 @@
             display: block;
             object-fit: cover;
             aspect-ratio: 16 / 9;
+            pointer-events: none; /* click goes to wrapper for lightbox */
         }
         .hero-badge {
             background: rgba(101,196,102,0.15);
@@ -432,7 +436,7 @@
             font-size: 0.85rem;
             color: #7A9A8C;
         }
-        /* FLOATING MENU (FAB) - fixed visibility */
+        /* ========== FLOATING MENU (FAB) ========== */
         .fab {
             position: fixed;
             bottom: 28px;
@@ -466,11 +470,14 @@
             flex-direction: column;
             gap: 12px;
             background: transparent;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding-bottom: 8px;
         }
         .fab.open .fab-actions {
             display: flex;
         }
-        .fab-action-item {
+        .fab-action-item, .fab-phrase {
             background: rgba(30,46,42,0.95);
             backdrop-filter: blur(8px);
             padding: 10px 20px;
@@ -485,6 +492,8 @@
             gap: 10px;
             font-size: 0.9rem;
             letter-spacing: 0.3px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
         }
         .fab-action-item i {
             font-size: 1.1rem;
@@ -496,18 +505,42 @@
             transform: translateX(-4px);
         }
         .fab-phrase {
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(8px);
-            padding: 10px 20px;
-            border-radius: 60px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            background: rgba(0,0,0,0.8);
+            border-color: var(--green);
             color: var(--green);
-            border: 1px solid var(--green);
+            font-weight: 600;
             white-space: nowrap;
+            pointer-events: none;
         }
-        /* Mobile specific: video parallax + no frame, and paragraph center-left */
+        /* Lightbox Modal */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .lightbox-content {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+        }
+        .lightbox-content video {
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            display: block;
+        }
+        /* Mobile specific: hide navbar, adjust text, menu overflow */
         @media (max-width: 900px) {
+            .navbar {
+                display: none;
+            }
             .hero-grid {
                 grid-template-columns: 1fr;
                 gap: 32px;
@@ -527,34 +560,23 @@
             .support-text {
                 max-width: 100%;
                 text-align: left;
-                margin-left: 0;
-                margin-right: auto;
             }
-            .statement-grid .statement-big {
-                text-align: left;
+            .fab-actions {
+                max-height: 65vh;
+                overflow-y: auto;
+                scrollbar-width: thin;
             }
-            .quote-block {
-                text-align: left;
-            }
-            /* Parallax video wrapper for mobile - slide effect */
-            .hero-video-wrapper {
-                transform: translateY(0);
-                transition: transform 0.1s linear;
-                will-change: transform;
+            .fab-action-item, .fab-phrase {
+                white-space: nowrap;
+                font-size: 0.85rem;
+                padding: 8px 18px;
             }
         }
         @media (max-width: 640px) {
-            .navbar {
-                flex-direction: column;
-            }
-            .nav-links {
-                gap: 20px;
-            }
             .pricing-card {
                 min-width: 100%;
             }
             .fab-action-item {
-                padding: 8px 16px;
                 font-size: 0.8rem;
             }
             .fab-phrase {
@@ -562,7 +584,6 @@
                 white-space: nowrap;
             }
         }
-        /* Additional alignment fix for support text on desktop */
         .support-text {
             text-align: left;
         }
@@ -639,25 +660,22 @@ function initThreeBackground() {
     });
 }
 
-// Parallax effect for mobile video
-function initMobileVideoParallax() {
-    if (window.innerWidth > 900) return;
-    const videoWrapper = document.querySelector('.hero-video-wrapper');
-    if (!videoWrapper) return;
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        const maxScroll = 400;
-        const translateY = Math.min(scrollY * 0.25, 80);
-        videoWrapper.style.transform = `translateY(${translateY}px)`;
-    });
+// Smooth scroll helper
+function scrollToSection(id) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 // Main Component
 const SocialEditLanding = () => {
+    const [lightboxOpen, setLightboxOpen] = React.useState(false);
+    const videoSrc = "https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4";
+    
     React.useEffect(() => {
         initThreeBackground();
-        initMobileVideoParallax();
-        // FAB toggle functionality
+        // FAB toggle and close on outside click
         const fab = document.getElementById('fab');
         if (fab) {
             const btn = fab.querySelector('.fab-main');
@@ -667,7 +685,6 @@ const SocialEditLanding = () => {
                     fab.classList.toggle('open');
                 };
             }
-            // Close when clicking outside? optional but fine
             document.addEventListener('click', (e) => {
                 if (!fab.contains(e.target)) {
                     fab.classList.remove('open');
@@ -705,7 +722,7 @@ const SocialEditLanding = () => {
     
     return React.createElement('div', { className: 'site-content' },
         React.createElement('canvas', { id: 'three-canvas' }),
-        // Navbar
+        // Navbar (hidden on mobile via CSS)
         React.createElement('div', { className: 'container' },
             React.createElement('div', { className: 'navbar' },
                 React.createElement('img', { className: 'logo-horizontal', src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d2fc6afa2dde97426193ca.svg', alt: 'Social Edit Co.', style: { height: '52px' } }),
@@ -717,7 +734,7 @@ const SocialEditLanding = () => {
                 )
             )
         ),
-        // Hero Section - no laptop frame, just raw video with shadow
+        // Hero Section with clickable video lightbox
         React.createElement('section', { style: { paddingTop: '20px' } },
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', animate: 'visible', className: 'hero-grid' },
@@ -734,15 +751,22 @@ const SocialEditLanding = () => {
                             React.createElement('a', { href: '#services', className: 'btn btn-secondary' }, 'View Packages')
                         )
                     ),
-                    React.createElement('div', { className: 'hero-video-wrapper' },
+                    React.createElement('div', { className: 'hero-video-wrapper', onClick: () => setLightboxOpen(true) },
                         React.createElement('video', { autoPlay: true, loop: true, muted: true, playsInline: true },
-                            React.createElement('source', { src: 'https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media/69d30b8efa2dde97426480b4.mp4', type: 'video/mp4' })
-                        )
+                            React.createElement('source', { src: videoSrc, type: 'video/mp4' })
+                        ),
+                        React.createElement('div', { style: { textAlign: 'center', padding: '8px', background: 'rgba(0,0,0,0.5)', color: 'white', fontSize: '12px', fontWeight: 500 } }, '🎬 Click to enlarge')
                     )
                 )
             )
         ),
-        // Statement
+        // Lightbox Modal
+        lightboxOpen && React.createElement('div', { className: 'lightbox', onClick: () => setLightboxOpen(false) },
+            React.createElement('div', { className: 'lightbox-content', onClick: (e) => e.stopPropagation() },
+                React.createElement('video', { src: videoSrc, controls: true, autoPlay: true, playsInline: true, style: { width: '100%', height: 'auto' } })
+            )
+        ),
+        // Statement Section
         React.createElement('section', null,
             React.createElement('div', { className: 'container' },
                 React.createElement(MotionComponent.div, { variants: fadeUp, initial: 'hidden', whileInView: 'visible', viewport: { once: true, margin: '-60px' } },
@@ -875,12 +899,16 @@ const SocialEditLanding = () => {
         React.createElement('div', { className: 'footer-bottom' },
             React.createElement('p', null, '© 2025 Social Edit Co. — Consistency as a Service. All rights reserved.')
         ),
-        // Floating Menu (FAB) - now visible
+        // Floating Menu (FAB) - includes Call, Email, and navigation links
         React.createElement('div', { className: 'fab', id: 'fab' },
             React.createElement('div', { className: 'fab-main' }, React.createElement('i', { className: 'fas fa-plus' })),
             React.createElement('div', { className: 'fab-actions' },
                 React.createElement('a', { href: 'tel:2692159207', className: 'fab-action-item' }, React.createElement('i', { className: 'fas fa-phone-alt' }), ' Call Us'),
                 React.createElement('a', { href: 'mailto:info@socialeditco.com', className: 'fab-action-item' }, React.createElement('i', { className: 'fas fa-envelope' }), ' Email Us'),
+                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('services') }, React.createElement('i', { className: 'fas fa-tag' }), ' Services'),
+                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('work') }, React.createElement('i', { className: 'fas fa-images' }), ' Sample Posts'),
+                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('about') }, React.createElement('i', { className: 'fas fa-user' }), ' About'),
+                React.createElement('div', { className: 'fab-action-item', onClick: () => scrollToSection('contact-form') }, React.createElement('i', { className: 'fas fa-paper-plane' }), ' Contact'),
                 React.createElement('div', { className: 'fab-phrase' }, '✨ Consistency beats perfection. Every time.')
             )
         )
@@ -892,3 +920,4 @@ root.render(React.createElement(SocialEditLanding));
 </script>
 </body>
 </html>
+```
