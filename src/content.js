@@ -1,6 +1,7 @@
 const svgData = (svg) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+const cdn = (file) => ['https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media', file].join('/');
 
-const editorialCard = ({ title, line, note, bg = '#0b0b0b', fg = '#f7f3ed', accent = '#9f927f' }) =>
+const fallbackCard = ({ title, line, note, bg = '#0b0b0b', fg = '#f7f3ed', accent = '#9f927f' }) =>
   svgData(`
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
       <rect width="900" height="1200" fill="${bg}"/>
@@ -25,41 +26,34 @@ export const brand = {
 };
 
 export const media = {
-  portrait: svgData(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100">
-      <rect width="900" height="1100" fill="#e9e2d7"/>
-      <circle cx="450" cy="330" r="170" fill="#cfc3b3"/>
-      <rect x="250" y="510" width="400" height="420" rx="190" fill="#0b0b0b"/>
-      <text x="88" y="970" fill="#0b0b0b" font-family="Georgia, serif" font-size="88">Hi, I'm Amy.</text>
-      <text x="92" y="1028" fill="#6f6558" font-family="Montserrat, Arial" font-size="24" letter-spacing="6">FOUNDER · SOCIAL EDIT CO.</text>
-    </svg>
-  `),
-  logoMark: '',
-  heroVideo: '',
+  portrait: cdn('69d2f52384c045c27476f1d1.webp'),
+  logoMark: cdn('69d2fc6afa2dde97426193ca.svg'),
+  heroVideo: cdn('69d3341284c045c274814fd2.mp4'),
+  fallback: fallbackCard({ title: 'YOUR', line: 'SOCIALS', note: 'STRATEGIC CONTENT FOR BUSINESSES', bg: '#f7f3ed', fg: '#0b0b0b', accent: '#9f927f' }),
   portfolio: [
     {
-      src: editorialCard({ title: 'YOUR', line: 'SOCIALS', note: 'STRATEGIC CONTENT FOR BUSINESSES', bg: '#f7f3ed', fg: '#0b0b0b', accent: '#9f927f' }),
-      alt: 'Editorial Social Edit Co. sample graphic reading your socials',
+      src: cdn('69d2f53b4cde4bbc2ae60994.jpg'),
+      alt: 'Social Edit Co. original branded content sample',
       label: 'Brand mood',
     },
     {
-      src: editorialCard({ title: 'CUSTOM', line: 'WEBSITE', note: 'DESIGNED TO FEEL INTENTIONAL', bg: '#0b0b0b', fg: '#f7f3ed', accent: '#d02f7e' }),
-      alt: 'Moody custom website design sample graphic',
+      src: cdn('69d2f53b84c045c27476f824.jpg'),
+      alt: 'Social Edit Co. original portfolio design sample',
       label: 'Portfolio',
     },
     {
-      src: editorialCard({ title: 'THE', line: 'EDIT', note: 'MONTHLY CONTENT PLANNING', bg: '#27221e', fg: '#fffaf3', accent: '#b9a58c' }),
-      alt: 'Monthly content planning design sample',
+      src: cdn('69d2f53b4cde4bbc2ae60993.jpg'),
+      alt: 'Social Edit Co. original service design sample',
       label: 'Services',
     },
     {
-      src: editorialCard({ title: 'VISIBILITY', line: 'DRIVES', note: 'CONSISTENT SOCIAL PRESENCE', bg: '#f0ebe4', fg: '#0b0b0b', accent: '#857866' }),
-      alt: 'Visibility drives growth editorial sample',
+      src: cdn('69d2f53bfa2dde9742606de3.jpg'),
+      alt: 'Social Edit Co. original strategy content sample',
       label: 'Strategy',
     },
     {
-      src: editorialCard({ title: 'BRAND', line: 'PRESENCE', note: 'POLISHED CONTENT THAT CONNECTS', bg: '#111111', fg: '#f7f3ed', accent: '#c9b79d' }),
-      alt: 'Brand presence content sample',
+      src: cdn('69d2f53b3d829c73b25452b7.jpg'),
+      alt: 'Social Edit Co. original visual identity content sample',
       label: 'Visual identity',
     },
   ],
