@@ -1,1 +1,1 @@
-console.log('app');
+export {};
