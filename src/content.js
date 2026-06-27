@@ -1,5 +1,6 @@
 const svgData = (svg) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 const cdn = (file) => ['https://assets.cdn.filesafe.space/E2BEbKIK8SvsJICq4vXY/media', file].join('/');
+const localAsset = (file) => ['./assets', file].join('/');
 
 const fallbackCard = ({ title, line, note, bg = '#0b0b0b', fg = '#f7f3ed', accent = '#9f927f' }) =>
   svgData(`
@@ -57,6 +58,20 @@ export const media = {
       label: 'Visual identity',
     },
   ],
+};
+
+export const sectionImages = {
+  hero: { src: localAsset('hero.webp'), fallback: media.fallback },
+  services: { src: localAsset('services.webp'), fallback: media.portfolio[0].src },
+  examples: { src: localAsset('examples.webp'), fallback: media.portfolio[1].src },
+  cta: { src: localAsset('cta.webp'), fallback: media.fallback },
+  footer: { src: localAsset('footer.webp'), fallback: media.fallback },
+  visibility: { src: localAsset('visibility.webp'), fallback: media.fallback },
+  signature: { src: localAsset('signature.webp'), fallback: media.fallback },
+  amy: { src: localAsset('amy.webp'), fallback: media.portrait },
+  presence: { src: localAsset('presence.webp'), fallback: media.portfolio[4].src },
+  fullEdit: { src: localAsset('full-edit.webp'), fallback: media.fallback },
+  instagramIcon: { src: localAsset('instagram.png'), fallback: media.fallback },
 };
 
 export const services = [
