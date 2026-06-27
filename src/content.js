@@ -5,3 +5,10 @@ export const brand = {
   phone: '',
   instagram: '#',
 };
+
+export const media = {
+  portrait: '',
+  logoMark: '',
+  heroVideo: '',
+  portfolio: [],
+};
