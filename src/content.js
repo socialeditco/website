@@ -12,3 +12,14 @@ export const media = {
   heroVideo: '',
   portfolio: [],
 };
+
+export const services = [
+  'Captions + messaging',
+  'Content planning',
+  'Branded post design',
+  'Marketing strategy',
+  'Monthly scheduling',
+  'Story content',
+  'Brand consistency',
+  'Content refreshes',
+];
