@@ -1,0 +1,133 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.asset-led {
+  background: #f4f1ec;
+}
+
+.asset-led .site-header {
+  background: rgba(244, 241, 236, 0.88);
+}
+
+.asset-led .site-header.scrolled {
+  background: rgba(244, 241, 236, 0.96);
+}
+
+.asset-section {
+  padding: clamp(46px, 7vw, 96px) 0;
+  background: #f4f1ec;
+}
+
+.asset-section:nth-of-type(even) {
+  background: #f1eee8;
+}
+
+.hero-asset {
+  padding-top: calc(76px + clamp(18px, 3vw, 42px));
+}
+
+.asset-frame {
+  width: min(100% - clamp(20px, 5vw, 88px), 1280px);
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid rgba(11, 11, 11, 0.08);
+  background: #f7f4ef;
+  box-shadow: 0 24px 90px rgba(11, 11, 11, 0.08);
+}
+
+.asset-frame.wide {
+  width: min(100% - clamp(14px, 3vw, 42px), 1380px);
+}
+
+.brand-plate {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.asset-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: clamp(18px, 3vw, 34px);
+}
+
+.package-intro {
+  margin-bottom: clamp(18px, 4vw, 40px);
+  text-align: center;
+}
+
+.package-intro .eyebrow {
+  justify-content: center;
+}
+
+.package-intro .serif-title {
+  font-size: clamp(3rem, 9vw, 8rem);
+}
+
+.asset-stack {
+  display: grid;
+  gap: clamp(18px, 4vw, 42px);
+}
+
+.asset-stack .asset-frame {
+  box-shadow: 0 22px 80px rgba(11, 11, 11, 0.12);
+}
+
+.cta-asset {
+  padding-bottom: clamp(64px, 8vw, 120px);
+}
+
+.form-shell {
+  margin-top: clamp(24px, 4vw, 48px);
+}
+
+.asset-led .contact-form {
+  background: rgba(255, 253, 248, 0.86);
+  backdrop-filter: blur(16px);
+}
+
+.footer-asset {
+  padding-top: 0;
+  background: #030303;
+}
+
+.footer-frame {
+  width: min(100%, 1400px);
+  border: 0;
+  box-shadow: none;
+  background: #030303;
+}
+
+.footer-frame .brand-plate {
+  width: 100%;
+}
+
+.asset-led .footer-bottom {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .asset-frame,
+  .asset-frame.wide {
+    width: min(100% - 18px, 1280px);
+  }
+
+  .asset-section {
+    padding-block: 34px;
+  }
+
+  .hero-asset {
+    padding-top: 94px;
+  }
+}
