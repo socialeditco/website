@@ -1,3 +1,21 @@
+const svgData = (svg) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+
+const editorialCard = ({ title, line, note, bg = '#0b0b0b', fg = '#f7f3ed', accent = '#9f927f' }) =>
+  svgData(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200">
+      <rect width="900" height="1200" fill="${bg}"/>
+      <circle cx="730" cy="180" r="230" fill="${accent}" opacity="0.16"/>
+      <rect x="58" y="58" width="784" height="1084" fill="none" stroke="${fg}" stroke-opacity="0.16"/>
+      <text x="74" y="112" fill="${fg}" font-family="Montserrat, Arial" font-size="20" letter-spacing="8">SOCIAL EDIT CO.</text>
+      <text x="74" y="286" fill="${fg}" font-family="Georgia, serif" font-size="124" letter-spacing="10">${title}</text>
+      <text x="74" y="420" fill="${fg}" font-family="Georgia, serif" font-size="124" letter-spacing="10">${line}</text>
+      <line x1="74" y1="520" x2="420" y2="520" stroke="${accent}" stroke-width="3"/>
+      <text x="74" y="606" fill="${fg}" font-family="Montserrat, Arial" font-size="24" letter-spacing="5">${note}</text>
+      <text x="74" y="1040" fill="${accent}" font-family="Georgia, serif" font-size="74" font-style="italic">edited.</text>
+      <text x="74" y="1104" fill="${fg}" opacity="0.62" font-family="Montserrat, Arial" font-size="18" letter-spacing="7">BRANDING · CONTENT · STRATEGY</text>
+    </svg>
+  `);
+
 export const brand = {
   name: 'Social Edit Co.',
   tagline: 'Your socials, edited.',
@@ -7,10 +25,44 @@ export const brand = {
 };
 
 export const media = {
-  portrait: '',
+  portrait: svgData(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100">
+      <rect width="900" height="1100" fill="#e9e2d7"/>
+      <circle cx="450" cy="330" r="170" fill="#cfc3b3"/>
+      <rect x="250" y="510" width="400" height="420" rx="190" fill="#0b0b0b"/>
+      <text x="88" y="970" fill="#0b0b0b" font-family="Georgia, serif" font-size="88">Hi, I'm Amy.</text>
+      <text x="92" y="1028" fill="#6f6558" font-family="Montserrat, Arial" font-size="24" letter-spacing="6">FOUNDER · SOCIAL EDIT CO.</text>
+    </svg>
+  `),
   logoMark: '',
   heroVideo: '',
-  portfolio: [],
+  portfolio: [
+    {
+      src: editorialCard({ title: 'YOUR', line: 'SOCIALS', note: 'STRATEGIC CONTENT FOR BUSINESSES', bg: '#f7f3ed', fg: '#0b0b0b', accent: '#9f927f' }),
+      alt: 'Editorial Social Edit Co. sample graphic reading your socials',
+      label: 'Brand mood',
+    },
+    {
+      src: editorialCard({ title: 'CUSTOM', line: 'WEBSITE', note: 'DESIGNED TO FEEL INTENTIONAL', bg: '#0b0b0b', fg: '#f7f3ed', accent: '#d02f7e' }),
+      alt: 'Moody custom website design sample graphic',
+      label: 'Portfolio',
+    },
+    {
+      src: editorialCard({ title: 'THE', line: 'EDIT', note: 'MONTHLY CONTENT PLANNING', bg: '#27221e', fg: '#fffaf3', accent: '#b9a58c' }),
+      alt: 'Monthly content planning design sample',
+      label: 'Services',
+    },
+    {
+      src: editorialCard({ title: 'VISIBILITY', line: 'DRIVES', note: 'CONSISTENT SOCIAL PRESENCE', bg: '#f0ebe4', fg: '#0b0b0b', accent: '#857866' }),
+      alt: 'Visibility drives growth editorial sample',
+      label: 'Strategy',
+    },
+    {
+      src: editorialCard({ title: 'BRAND', line: 'PRESENCE', note: 'POLISHED CONTENT THAT CONNECTS', bg: '#111111', fg: '#f7f3ed', accent: '#c9b79d' }),
+      alt: 'Brand presence content sample',
+      label: 'Visual identity',
+    },
+  ],
 };
 
 export const services = [
