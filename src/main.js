@@ -1,9 +1,8 @@
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import './style.css';
 import { brand, media, services, packages, proofPoints } from './content.js';
 
-gsap.registerPlugin(ScrollTrigger);
+const gsap = window.gsap;
+const ScrollTrigger = window.ScrollTrigger;
+if (gsap && ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
 
 const app = document.querySelector('#app');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -36,11 +35,9 @@ function render() {
         </nav>
         <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" data-menu-toggle><span></span><span></span><span></span></button>
       </header>
-
       <div class="mobile-menu" data-mobile-menu aria-hidden="true">
         <nav>${nav.map(([href, label]) => `<a href="${href}" data-mobile-link>${label}</a>`).join('')}</nav>
       </div>
-
       <main id="main">
         <section class="hero" id="top">
           <div class="container hero-grid">
@@ -59,14 +56,12 @@ function render() {
             </div>
           </div>
         </section>
-
         <section class="section" id="services">
           <div class="container split">
             <div class="reveal"><p class="eyebrow">What I do</p><h2 class="serif-title">Social media marketing that fits <em>your</em> brand.</h2><p class="copy">From business to business, no two brands need the same voice. Social Edit Co. creates content that helps you stay visible, recognizable, and consistent online.</p></div>
             <div class="service-panel reveal"><ul>${services.map((item) => `<li>${esc(item)}</li>`).join('')}</ul></div>
           </div>
         </section>
-
         <section class="packages" id="packages">
           <div class="container">
             <div class="section-head reveal"><div><p class="eyebrow">Monthly package</p><h2 class="serif-title">The Edits</h2></div><p class="copy">Strategic, brand-aligned content designed to keep your business visible, consistent, and engaging from month to month.</p></div>
@@ -78,31 +73,26 @@ function render() {
             </div>
           </div>
         </section>
-
         <section class="section">
           <div class="container why-grid"><div class="reveal"><p class="eyebrow">Why it matters</p><h2 class="serif-title">Visibility drives growth</h2></div><p class="copy reveal">Strategic, consistent content keeps businesses visible while turning online attention into meaningful growth. Your audience cannot remember a brand that keeps disappearing.</p></div>
           <div class="container proof-grid">${proofPoints.map((point) => `<article class="proof reveal-item"><h3>${esc(point.title)}</h3><p>${esc(point.body)}</p></article>`).join('')}</div>
         </section>
-
         <section class="section presence">
           <div class="container split reverse">
             <div class="reveal"><p class="eyebrow">Social presence</p><h2 class="serif-title">A digital presence <em>worth</em> following.</h2><p class="copy">Branding, content direction, strategy, and scheduling — so your page looks intentional before someone ever reaches out.</p></div>
             <div class="presence-art reveal" aria-hidden="true"><div class="phone big"><div class="phone-screen"><strong>The<br>Edit</strong></div></div><div class="tile t1">Editorial posts</div><div class="tile t2">Content direction</div><div class="tile t3">Captions</div></div>
           </div>
         </section>
-
         <section class="section portfolio" id="work">
           <div class="container section-head reveal"><div><p class="eyebrow">Portfolio</p><h2 class="serif-title">The difference is in the details.</h2></div><p class="copy">A brand should feel recognizable before anyone reads the caption. The grid, colors, type, and message all work together.</p></div>
           <ul class="container portfolio-grid">${media.portfolio.map((item) => `<li class="portfolio-item"><img src="${item.src}" alt="${esc(item.alt)}" loading="lazy" decoding="async" /><span>${esc(item.label)}</span></li>`).join('')}</ul>
         </section>
-
         <section class="section about" id="about">
           <div class="container split">
             <div class="reveal"><p class="eyebrow">About Amy</p><h2 class="serif-title">Hi, I'm Amy.</h2><p class="lead">I help businesses create elevated, consistent social media content that feels polished, modern, and on-brand.</p><p class="copy">From content concepts to captions, I handle the details so your business shows up consistently online. Social Edit Co. is built for business owners who want a stronger digital presence without adding another full-time job to their plate.</p></div>
             <div class="about-image reveal"><img src="${media.portrait}" alt="Amy Carpenter, founder of Social Edit Co." loading="lazy" decoding="async" /></div>
           </div>
         </section>
-
         <section class="cta" id="contact">
           <div class="container narrow"><p class="eyebrow center">Let's work together</p><h2 class="serif-title">Ready to elevate your social media?</h2><p class="copy center-copy">Strategic content. Elevated branding. Real results for your business.</p>
             <form class="contact-form reveal" data-form>
@@ -116,7 +106,6 @@ function render() {
           </div>
         </section>
       </main>
-
       <footer class="footer"><div class="container footer-grid"><div><div class="footer-logo">Social<br>Edit<em>co.</em></div><p>Social media marketing for businesses that want to stay visible, polished, and consistent online.</p></div><div class="footer-links"><a href="mailto:${brand.email}">${brand.email}</a><a href="#packages">View packages</a></div></div><div class="container footer-bottom"><span>© ${new Date().getFullYear()} ${brand.name}</span><span>Service-area business · contact-only</span></div></footer>
     </div>`;
 }
@@ -178,15 +167,14 @@ function initMotion() {
   const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 12);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
-  if (reducedMotion) return;
-
+  if (reducedMotion || !gsap) return;
   gsap.set('.hero-title span', { yPercent: 110 });
   gsap.set('.hero .reveal', { opacity: 0, y: 28 });
   gsap.timeline({ defaults: { ease: 'power3.out' } })
     .to('.hero-title span', { yPercent: 0, duration: 1, stagger: 0.12 })
     .to('.hero .reveal', { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 }, '-=0.45')
     .from('.hero-art .visual, .hero-art .phone', { opacity: 0, y: 42, duration: 0.85, stagger: 0.1 }, '-=0.55');
-
+  if (!ScrollTrigger) return;
   gsap.utils.toArray('.reveal').forEach((el) => {
     if (el.closest('.hero')) return;
     gsap.from(el, { opacity: 0, y: 42, duration: 0.85, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 84%', once: true } });
